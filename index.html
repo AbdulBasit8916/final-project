@@ -8,37 +8,43 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 <body>
-  <div class="app-container">
+  <div class="app">
+    <!-- Sidebar -->
     <aside class="sidebar">
       <div class="logo">
-        <i class="fa-solid fa-burger logo-icon"></i>
-        <h2>Food<span>Men</span></h2>
+        <i class="fa-solid fa-burger"></i>
+        <h2>Food <span>Men</span></h2>
       </div>
-      <nav class="nav-links">
-        <a href="#home" class="nav-btn active" onclick="setActiveNav(this)"><i class="fa-solid fa-house"></i> Home</a>
-        <a href="#categories" class="nav-btn" onclick="setActiveNav(this)"><i class="fa-solid fa-border-all"></i> Menu</a>
-        <a href="#vendors" class="nav-btn" onclick="setActiveNav(this)"><i class="fa-solid fa-store"></i> Vendors</a>
-        <a href="#orders" class="nav-btn" onclick="setActiveNav(this)"><i class="fa-solid fa-receipt"></i> Orders</a>
-        <a href="#profile" class="nav-btn" onclick="setActiveNav(this)"><i class="fa-solid fa-user"></i> Profile</a>
+
+      <nav class="nav-menu">
+        <a href="#home" class="nav-item active" onclick="setActiveNav(this)"><i class="fa-solid fa-house"></i> Home</a>
+        <a href="#menu" class="nav-item" onclick="setActiveNav(this)"><i class="fa-solid fa-border-all"></i> Menu</a>
+        <a href="#vendors" class="nav-item" onclick="setActiveNav(this)"><i class="fa-solid fa-store"></i> Vendors</a>
+        <a href="#orders" class="nav-item" onclick="setActiveNav(this)"><i class="fa-solid fa-receipt"></i> Orders</a>
+        <a href="#profile" class="nav-item" onclick="setActiveNav(this)"><i class="fa-solid fa-user"></i> Profile</a>
       </nav>
-      <div class="sidebar-bottom">
-        <button class="btn btn-outline" onclick="openVendorModal()"><i class="fa-solid fa-plus"></i> Add Vendor</button>
-        <button class="btn btn-outline" onclick="handleLogin()"><i class="fa-solid fa-right-to-bracket"></i> Login</button>
+
+      <div class="sidebar-footer">
+        <button class="btn-outline-wide" onclick="triggerAddVendor()"><i class="fa-solid fa-plus"></i> Add Vendor</button>
+        <button class="btn-outline-wide" onclick="triggerLogin()"><i class="fa-solid fa-right-to-bracket"></i> Login</button>
       </div>
     </aside>
 
-    <main class="main-content">
-      <header class="topbar">
-        <div class="search-bar">
+    <!-- Main Content -->
+    <main class="content">
+      <!-- Search & Profile Bar -->
+      <header class="top-bar">
+        <div class="search-box">
           <i class="fa-solid fa-magnifying-glass"></i>
-          <input type="text" id="searchInput" placeholder="Search food, vendors..." onkeyup="searchFood()">
+          <input type="text" id="searchInput" placeholder="Search food, vendors..." onkeyup="handleSearch()">
         </div>
-        <div class="user-actions">
-          <button class="cart-btn" onclick="toggleCartModal()">
+
+        <div class="header-right">
+          <button class="cart-icon" onclick="openCart()">
             <i class="fa-solid fa-bag-shopping"></i>
             <span id="cartCount" class="badge">0</span>
           </button>
-          <div class="profile-pill">
+          <div class="user-pill">
             <span class="avatar">G</span>
             <span>Guest</span>
             <i class="fa-solid fa-chevron-down"></i>
@@ -46,72 +52,59 @@
         </div>
       </header>
 
+      <!-- Hero Banner -->
       <section class="hero-banner" id="home">
-        <div class="hero-text">
-          <span class="sub-tag">✨ Deliciousness delivered</span>
-          <h1>Good food.<br><span class="highlight">Good mood.</span></h1>
-          <p>Discover your favorite meals, restaurants and local food vendors in one place.</p>
-          <div class="hero-btns">
-            <button class="btn btn-primary" onclick="scrollToSection('popular')">Explore Menu <i class="fa-solid fa-arrow-right"></i></button>
-            <button class="btn btn-dark" onclick="scrollToSection('vendors')">View Vendors</button>
+        <div class="hero-left">
+          <p class="tagline">✨ Deliciousness delivered</p>
+          <h1>Good food.<br><span class="orange-text">Good mood.</span></h1>
+          <p class="sub-desc">Discover your favorite meals, restaurants and local food vendors in one place.</p>
+          <div class="hero-actions">
+            <button class="btn-orange" onclick="scrollToSection('popular-section')">Explore Menu <i class="fa-solid fa-arrow-right"></i></button>
+            <button class="btn-dark" onclick="scrollToSection('vendor-section')">View Vendors</button>
           </div>
         </div>
-        <div class="hero-badge">
-          <div class="rating-box">
-            <span class="star">★ 4.9 Rating</span>
-            <span class="fast">⚡ Fast Delivery</span>
+        <div class="hero-right">
+          <div class="stats-card">
+            <div class="stat"><i class="fa-solid fa-burger"></i></div>
+            <div class="rating">★ 4.9 Rating</div>
+            <div class="speed">⚡ Fast Delivery</div>
           </div>
         </div>
       </section>
 
-      <section class="section" id="categories">
-        <span class="section-sub">Explore</span>
-        <h2 class="section-title">Food Categories</h2>
-        <div class="category-pills">
-          <button class="cat-pill active" onclick="filterCategory('all', this)"><i class="fa-solid fa-utensils"></i> All</button>
-          <button class="cat-pill" onclick="filterCategory('burgers', this)">🍔 Burgers</button>
-          <button class="cat-pill" onclick="filterCategory('pizza', this)">🍕 Pizza</button>
-          <button class="cat-pill" onclick="filterCategory('chicken', this)">🍗 Chicken</button>
-          <button class="cat-pill" onclick="filterCategory('desserts', this)">🍰 Desserts</button>
-          <button class="cat-pill" onclick="filterCategory('drinks', this)">🥤 Drinks</button>
+      <!-- Category Filter -->
+      <section class="section">
+        <span class="sub-title">Explore</span>
+        <h2 class="main-title">Food Categories</h2>
+        <div class="category-list">
+          <button class="cat-btn active" onclick="filterCategory('all', this)"><i class="fa-solid fa-utensils"></i> All</button>
+          <button class="cat-btn" onclick="filterCategory('burgers', this)">🍔 Burgers</button>
+          <button class="cat-btn" onclick="filterCategory('pizza', this)">🍕 Pizza</button>
+          <button class="cat-btn" onclick="filterCategory('chicken', this)">🍗 Chicken</button>
+          <button class="cat-btn" onclick="filterCategory('desserts', this)">🍰 Desserts</button>
+          <button class="cat-btn" onclick="filterCategory('drinks', this)">🥤 Drinks</button>
         </div>
       </section>
 
-      <section class="section" id="popular">
-        <span class="section-sub">Our Menu</span>
-        <h2 class="section-title">Popular Food</h2>
+      <!-- Popular Food Grid -->
+      <section class="section" id="popular-section">
+        <span class="sub-title">Our Menu</span>
+        <h2 class="main-title">Popular Food</h2>
         <div class="cards-grid" id="foodGrid">
-          </div>
+          <!-- Dynamically Rendered -->
+        </div>
       </section>
 
-      <section class="section" id="vendors">
-        <div class="section-header">
-          <div>
-            <span class="section-sub">Discover</span>
-            <h2 class="section-title">Our Vendors</h2>
-          </div>
-          <button class="btn btn-dark btn-sm" onclick="openVendorModal()"><i class="fa-solid fa-plus"></i> Add Vendor</button>
-        </div>
+      <!-- Vendors Grid -->
+      <section class="section" id="vendor-section">
+        <span class="sub-title">Discover</span>
+        <h2 class="main-title">Our Vendors</h2>
         <div class="cards-grid" id="vendorGrid">
-          </div>
+          <!-- Dynamically Rendered -->
+        </div>
+        <button class="btn-dark vendor-add-btn" onclick="triggerAddVendor()">Add Vendor +</button>
       </section>
     </main>
-  </div>
-
-  <div class="modal" id="cartModal">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h3>Your Cart</h3>
-        <button class="close-btn" onclick="toggleCartModal()">&times;</button>
-      </div>
-      <div class="modal-body" id="cartItems">
-        <p>Your cart is empty.</p>
-      </div>
-      <div class="modal-footer">
-        <p>Total: $<span id="cartTotal">0.00</span></p>
-        <button class="btn btn-primary" onclick="checkout()">Checkout</button>
-      </div>
-    </div>
   </div>
 
   <script src="script.js"></script>
