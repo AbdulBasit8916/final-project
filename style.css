@@ -190,7 +190,7 @@ body {
   font-weight: bold;
 }
 
-/* Hero Section Layout Balance */
+/* Hero Section Layout */
 .hero-section {
   display: flex;
   justify-content: space-between;
@@ -239,31 +239,32 @@ body {
   margin-top: 1.5rem;
 }
 
-/* Hero Food Container - Large & Centered */
+/* Hero Food Container - Extra Wide Layout */
 .hero-food {
   position: relative;
   display: flex;
   justify-content: center;
   align-items: center;
-  min-width: 420px;
-  height: 420px;
+  width: 100%;
+  max-width: 520px;
+  height: 320px;
   flex-shrink: 0;
 }
 
 .hero-circle {
   position: absolute;
-  width: 380px;
-  height: 380px;
-  background: radial-gradient(circle, rgba(255, 87, 34, 0.25) 0%, rgba(0, 0, 0, 0) 70%);
+  width: 440px;
+  height: 280px;
+  background: radial-gradient(ellipse at center, rgba(255, 87, 34, 0.25) 0%, rgba(0, 0, 0, 0) 70%);
   border-radius: 50%;
   z-index: 1;
 }
 
-/* Larger Crop Box */
+/* Wide Image Box */
 .hero-img-box {
-  width: 360px;
-  height: 360px;
-  border-radius: 28px;
+  width: 100%;
+  height: 300px;
+  border-radius: 24px;
   overflow: hidden;
   position: relative;
   z-index: 2;
@@ -283,13 +284,13 @@ body {
 
 /* Smooth Hover Animation */
 .hero-img-box:hover {
-  transform: translateY(-6px) scale(1.03);
+  transform: translateY(-6px) scale(1.02);
   box-shadow: 0 20px 45px rgba(255, 87, 34, 0.35);
   border-color: var(--primary);
 }
 
 .hero-img-box:hover .hero-img {
-  transform: scale(1.08);
+  transform: scale(1.06);
 }
 
 /* Floating Badges Alignment */
@@ -309,13 +310,13 @@ body {
 }
 
 .card-one {
-  top: 15px;
-  right: -5px;
+  top: 0px;
+  right: -10px;
 }
 
 .card-two {
-  bottom: 15px;
-  left: -5px;
+  bottom: 0px;
+  left: -10px;
 }
 
 .floating-card:hover {
@@ -578,12 +579,11 @@ footer {
     justify-content: center;
   }
   .hero-food {
-    min-width: 100%;
-    height: 320px;
+    max-width: 100%;
+    height: 260px;
   }
   .hero-img-box {
-    width: 280px;
-    height: 280px;
+    height: 240px;
   }
   .cart-drawer {
     width: 100%;
