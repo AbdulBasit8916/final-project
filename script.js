@@ -14,31 +14,27 @@ let vendorsData = [
   { id: 2, name: 'Pizza Max', type: 'Restaurant', category: 'Italian / Fast Food', phone: '+92 321 9876543', address: 'DHA Phase 5', desc: 'Authentic cheesy pizzas.' }
 ];
 
-// App State
+// Application State
 let cart = [];
 let orders = [];
 let currentUser = null;
 let activeFilter = 'All';
 
-// DOM Elements
-const foodGrid = document.getElementById('foodGrid');
-const vendorGrid = document.getElementById('vendorGrid');
-const ordersContainer = document.getElementById('ordersContainer');
-const cartItems = document.getElementById('cartItems');
-const cartCount = document.getElementById('cartCount');
-const cartSubtotal = document.getElementById('cartSubtotal');
-const cartTotal = document.getElementById('cartTotal');
-
-// Modals Setup
+// Global Modals
 let authModal, vendorModal, checkoutModal, foodModal;
 
-// Initialize Application
+// Initialize when DOM is completely loaded
 document.addEventListener('DOMContentLoaded', () => {
-  // Bootstrap Modals Initialization
-  authModal = new bootstrap.Modal(document.getElementById('authModal'));
-  vendorModal = new bootstrap.Modal(document.getElementById('vendorModal'));
-  checkoutModal = new bootstrap.Modal(document.getElementById('checkoutModal'));
-  foodModal = new bootstrap.Modal(document.getElementById('foodModal'));
+  // Safe Bootstrap Modals Initialization
+  const authEl = document.getElementById('authModal');
+  const vendorEl = document.getElementById('vendorModal');
+  const checkoutEl = document.getElementById('checkoutModal');
+  const foodEl = document.getElementById('foodModal');
+
+  if (authEl) authModal = new bootstrap.Modal(authEl);
+  if (vendorEl) vendorModal = new bootstrap.Modal(vendorEl);
+  if (checkoutEl) checkoutModal = new bootstrap.Modal(checkoutEl);
+  if (foodEl) foodModal = new bootstrap.Modal(foodEl);
 
   renderMenu();
   renderVendors();
@@ -46,9 +42,11 @@ document.addEventListener('DOMContentLoaded', () => {
   setupEventListeners();
 });
 
-// Render Functions
+// Render Menu Items
 function renderMenu(searchTerm = '') {
+  const foodGrid = document.getElementById('foodGrid');
   if (!foodGrid) return;
+
   foodGrid.innerHTML = '';
   
   const filtered = foodData.filter(item => {
@@ -82,8 +80,11 @@ function renderMenu(searchTerm = '') {
   });
 }
 
+// Render Vendors
 function renderVendors() {
+  const vendorGrid = document.getElementById('vendorGrid');
   if (!vendorGrid) return;
+
   vendorGrid.innerHTML = '';
   vendorsData.forEach(v => {
     const card = document.createElement('div');
@@ -99,13 +100,17 @@ function renderVendors() {
   });
 }
 
+// Render Orders
 function renderOrders() {
+  const ordersContainer = document.getElementById('ordersContainer');
   if (!ordersContainer) return;
+
   ordersContainer.innerHTML = '';
   if (orders.length === 0) {
     ordersContainer.innerHTML = `<p class="text-muted">No recent orders found.</p>`;
     return;
   }
+
   orders.forEach(order => {
     const card = document.createElement('div');
     card.className = 'order-card';
@@ -124,7 +129,7 @@ function renderOrders() {
   });
 }
 
-// Cart System Logic
+// Cart System Global Methods
 window.addToCart = function(id) {
   const item = foodData.find(f => f.id === id);
   const existing = cart.find(c => c.id === id);
@@ -137,7 +142,26 @@ window.addToCart = function(id) {
   showToast(`${item.name} added to cart!`);
 };
 
+window.changeQty = function(id, delta) {
+  const item = cart.find(c => c.id === id);
+  if (item) {
+    item.qty += delta;
+    if (item.qty <= 0) {
+      cart = cart.filter(c => c.id !== id);
+    }
+  }
+  updateCartUI();
+};
+
 function updateCartUI() {
+  const cartCount = document.getElementById('cartCount');
+  const cartSubtotal = document.getElementById('cartSubtotal');
+  const cartTotal = document.getElementById('cartTotal');
+  const checkoutTotal = document.getElementById('checkoutTotal');
+  const cartItems = document.getElementById('cartItems');
+  const cartEmpty = document.getElementById('cartEmpty');
+  const cartFooter = document.getElementById('cartFooter');
+
   const totalCount = cart.reduce((acc, item) => acc + item.qty, 0);
   const subtotal = cart.reduce((acc, item) => acc + (item.price * item.qty), 0);
   const total = subtotal > 0 ? subtotal + 150 : 0;
@@ -145,12 +169,7 @@ function updateCartUI() {
   if (cartCount) cartCount.textContent = totalCount;
   if (cartSubtotal) cartSubtotal.textContent = `Rs. ${subtotal}`;
   if (cartTotal) cartTotal.textContent = `Rs. ${total}`;
-  
-  const checkoutTotal = document.getElementById('checkoutTotal');
   if (checkoutTotal) checkoutTotal.textContent = `Rs. ${total}`;
-
-  const cartEmpty = document.getElementById('cartEmpty');
-  const cartFooter = document.getElementById('cartFooter');
 
   if (cart.length === 0) {
     if (cartEmpty) cartEmpty.classList.remove('d-none');
@@ -164,13 +183,13 @@ function updateCartUI() {
       cartItems.innerHTML = cart.map(item => `
         <div class="cart-item">
           <div>
-            <h6>${item.name}</h6>
-            <small>Rs. ${item.price} x ${item.qty}</small>
+            <h6 class="mb-0">${item.name}</h6>
+            <small class="text-muted">Rs. ${item.price} x ${item.qty}</small>
           </div>
-          <div class="cart-controls">
-            <button class="btn btn-sm btn-outline-secondary" onclick="changeQty(${item.id}, -1)">-</button>
-            <span class="mx-2">${item.qty}</span>
-            <button class="btn btn-sm btn-outline-secondary" onclick="changeQty(${item.id}, 1)">+</button>
+          <div class="cart-controls d-flex align-items-center gap-2">
+            <button class="btn btn-sm btn-outline-secondary py-0 px-2" onclick="changeQty(${item.id}, -1)">-</button>
+            <span>${item.qty}</span>
+            <button class="btn btn-sm btn-outline-secondary py-0 px-2" onclick="changeQty(${item.id}, 1)">+</button>
           </div>
         </div>
       `).join('');
@@ -178,18 +197,7 @@ function updateCartUI() {
   }
 }
 
-window.changeQty = function(id, delta) {
-  const item = cart.find(c => c.id === id);
-  if (item) {
-    item.qty += delta;
-    if (item.qty <= 0) {
-      cart = cart.filter(c => c.id !== id);
-    }
-  }
-  updateCartUI();
-};
-
-// Cart Drawer Functionality
+// Cart Drawer Open/Close Handler
 function toggleCart() {
   const cartDrawer = document.getElementById('cartDrawer');
   const drawerOverlay = document.getElementById('drawerOverlay');
@@ -200,7 +208,7 @@ function toggleCart() {
   }
 }
 
-// Modal Detail View
+// Food Modal View
 window.openFoodDetail = function(id) {
   const item = foodData.find(f => f.id === id);
   document.getElementById('detailIcon').textContent = item.icon;
@@ -208,29 +216,33 @@ window.openFoodDetail = function(id) {
   document.getElementById('detailName').textContent = item.name;
   document.getElementById('detailDescription').textContent = item.desc;
   document.getElementById('detailPrice').textContent = `Rs. ${item.price}`;
-  document.getElementById('detailAddBtn').onclick = () => {
+  
+  const addBtn = document.getElementById('detailAddBtn');
+  addBtn.onclick = () => {
     addToCart(item.id);
-    foodModal.hide();
+    if (foodModal) foodModal.hide();
   };
-  foodModal.show();
+  
+  if (foodModal) foodModal.show();
 };
 
+// All Event Listeners Setup
 function setupEventListeners() {
-  // Cart Trigger Events
+  // 1. Cart Button Trigger
   const cartBtn = document.getElementById('cartBtn');
   const closeCart = document.getElementById('closeCart');
   const drawerOverlay = document.getElementById('drawerOverlay');
 
   if (cartBtn) {
-    cartBtn.addEventListener('click', (e) => {
+    cartBtn.onclick = (e) => {
       e.preventDefault();
       toggleCart();
-    });
+    };
   }
-  if (closeCart) closeCart.addEventListener('click', toggleCart);
-  if (drawerOverlay) drawerOverlay.addEventListener('click', toggleCart);
+  if (closeCart) closeCart.onclick = toggleCart;
+  if (drawerOverlay) drawerOverlay.onclick = toggleCart;
 
-  // Mobile Sidebar Toggles
+  // 2. Mobile Navigation
   const menuToggle = document.getElementById('menuToggle');
   const sidebarClose = document.getElementById('sidebarClose');
   const mobileOverlay = document.getElementById('mobileOverlay');
@@ -241,7 +253,6 @@ function setupEventListeners() {
       mobileOverlay?.classList.add('active');
     };
   }
-  
   if (sidebarClose) sidebarClose.onclick = closeSidebar;
   if (mobileOverlay) mobileOverlay.onclick = closeSidebar;
 
@@ -250,17 +261,15 @@ function setupEventListeners() {
     mobileOverlay?.classList.remove('active');
   }
 
-  // Search Input Filter
+  // 3. Search Bar
   const searchInput = document.getElementById('searchInput');
   if (searchInput) {
-    searchInput.addEventListener('input', (e) => {
-      renderMenu(e.target.value);
-    });
+    searchInput.oninput = (e) => renderMenu(e.target.value);
   }
 
-  // Category & Filter Buttons
+  // 4. Category Filters
   document.querySelectorAll('.filter-btn, .category-card').forEach(btn => {
-    btn.addEventListener('click', (e) => {
+    btn.onclick = (e) => {
       document.querySelectorAll('.filter-btn, .category-card').forEach(b => b.classList.remove('active'));
       const category = e.currentTarget.dataset.category || e.currentTarget.dataset.filter;
       activeFilter = category;
@@ -269,11 +278,11 @@ function setupEventListeners() {
         .forEach(b => b.classList.add('active'));
       
       renderMenu();
-    });
+    };
   });
 
-  // Auth Modal Controls
-  const openAuth = () => authModal.show();
+  // 5. Auth Modal Actions
+  const openAuth = () => { if (authModal) authModal.show(); };
   document.getElementById('sideLoginBtn')?.addEventListener('click', openAuth);
   document.getElementById('profileLoginBtn')?.addEventListener('click', openAuth);
   document.getElementById('profileBtn')?.addEventListener('click', openAuth);
@@ -283,9 +292,9 @@ function setupEventListeners() {
     switchAuth.onclick = (e) => {
       e.preventDefault();
       const signupField = document.querySelector('.signup-only');
-      const isSignup = signupField.classList.toggle('d-none');
-      document.getElementById('authTitle').textContent = !isSignup ? 'Create Account' : 'Login to Food Men';
-      e.target.textContent = !isSignup ? 'Already have an account? Login' : 'Create account';
+      const isHidden = signupField.classList.toggle('d-none');
+      document.getElementById('authTitle').textContent = isHidden ? 'Login to Food Men' : 'Create Account';
+      e.target.textContent = isHidden ? 'Create account' : 'Already have an account? Login';
     };
   }
 
@@ -293,7 +302,7 @@ function setupEventListeners() {
     const email = document.getElementById('authEmail').value || 'User';
     currentUser = { name: email.split('@')[0], email: email };
     updateUserUI();
-    authModal.hide();
+    if (authModal) authModal.hide();
     showToast(`Welcome back, ${currentUser.name}!`);
   });
 
@@ -303,8 +312,8 @@ function setupEventListeners() {
     showToast('Logged out successfully.');
   });
 
-  // Vendor Registration
-  const openVendor = () => vendorModal.show();
+  // 6. Vendor Registration
+  const openVendor = () => { if (vendorModal) vendorModal.show(); };
   document.getElementById('openVendorBtn')?.addEventListener('click', openVendor);
   document.getElementById('openVendorBtn2')?.addEventListener('click', openVendor);
 
@@ -323,16 +332,16 @@ function setupEventListeners() {
       };
       vendorsData.push(newVendor);
       renderVendors();
-      vendorModal.hide();
+      if (vendorModal) vendorModal.hide();
       e.target.reset();
       showToast('Vendor registered successfully!');
     };
   }
 
-  // Checkout Processing
+  // 7. Checkout Flow
   document.getElementById('checkoutBtn')?.addEventListener('click', () => {
     toggleCart();
-    checkoutModal.show();
+    if (checkoutModal) checkoutModal.show();
   });
 
   const checkoutForm = document.getElementById('checkoutForm');
@@ -351,7 +360,7 @@ function setupEventListeners() {
       cart = [];
       updateCartUI();
       renderOrders();
-      checkoutModal.hide();
+      if (checkoutModal) checkoutModal.hide();
       showToast('Order placed successfully!');
     };
   }
