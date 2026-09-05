@@ -28,19 +28,18 @@ const cartItems = document.getElementById('cartItems');
 const cartCount = document.getElementById('cartCount');
 const cartSubtotal = document.getElementById('cartSubtotal');
 const cartTotal = document.getElementById('cartTotal');
-const cartDrawer = document.getElementById('cartDrawer');
-const drawerOverlay = document.getElementById('drawerOverlay');
-const sidebar = document.getElementById('sidebar');
-const mobileOverlay = document.getElementById('mobileOverlay');
 
-// Bootstrap Modals
-const authModal = new bootstrap.Modal(document.getElementById('authModal'));
-const vendorModal = new bootstrap.Modal(document.getElementById('vendorModal'));
-const checkoutModal = new bootstrap.Modal(document.getElementById('checkoutModal'));
-const foodModal = new bootstrap.Modal(document.getElementById('foodModal'));
+// Modals Setup
+let authModal, vendorModal, checkoutModal, foodModal;
 
 // Initialize Application
 document.addEventListener('DOMContentLoaded', () => {
+  // Bootstrap Modals Initialization
+  authModal = new bootstrap.Modal(document.getElementById('authModal'));
+  vendorModal = new bootstrap.Modal(document.getElementById('vendorModal'));
+  checkoutModal = new bootstrap.Modal(document.getElementById('checkoutModal'));
+  foodModal = new bootstrap.Modal(document.getElementById('foodModal'));
+
   renderMenu();
   renderVendors();
   renderOrders();
@@ -49,7 +48,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
 // Render Functions
 function renderMenu(searchTerm = '') {
+  if (!foodGrid) return;
   foodGrid.innerHTML = '';
+  
   const filtered = foodData.filter(item => {
     const matchesFilter = activeFilter === 'All' || item.category === activeFilter;
     const matchesSearch = item.name.toLowerCase().includes(searchTerm.toLowerCase());
@@ -82,6 +83,7 @@ function renderMenu(searchTerm = '') {
 }
 
 function renderVendors() {
+  if (!vendorGrid) return;
   vendorGrid.innerHTML = '';
   vendorsData.forEach(v => {
     const card = document.createElement('div');
@@ -98,6 +100,7 @@ function renderVendors() {
 }
 
 function renderOrders() {
+  if (!ordersContainer) return;
   ordersContainer.innerHTML = '';
   if (orders.length === 0) {
     ordersContainer.innerHTML = `<p class="text-muted">No recent orders found.</p>`;
@@ -139,32 +142,39 @@ function updateCartUI() {
   const subtotal = cart.reduce((acc, item) => acc + (item.price * item.qty), 0);
   const total = subtotal > 0 ? subtotal + 150 : 0;
 
-  cartCount.textContent = totalCount;
-  cartSubtotal.textContent = `Rs. ${subtotal}`;
-  cartTotal.textContent = `Rs. ${total}`;
-  document.getElementById('checkoutTotal').textContent = `Rs. ${total}`;
+  if (cartCount) cartCount.textContent = totalCount;
+  if (cartSubtotal) cartSubtotal.textContent = `Rs. ${subtotal}`;
+  if (cartTotal) cartTotal.textContent = `Rs. ${total}`;
+  
+  const checkoutTotal = document.getElementById('checkoutTotal');
+  if (checkoutTotal) checkoutTotal.textContent = `Rs. ${total}`;
+
+  const cartEmpty = document.getElementById('cartEmpty');
+  const cartFooter = document.getElementById('cartFooter');
 
   if (cart.length === 0) {
-    document.getElementById('cartEmpty').classList.remove('d-none');
-    document.getElementById('cartFooter').classList.add('d-none');
-    cartItems.innerHTML = '';
+    if (cartEmpty) cartEmpty.classList.remove('d-none');
+    if (cartFooter) cartFooter.classList.add('d-none');
+    if (cartItems) cartItems.innerHTML = '';
   } else {
-    document.getElementById('cartEmpty').classList.add('d-none');
-    document.getElementById('cartFooter').classList.remove('d-none');
+    if (cartEmpty) cartEmpty.classList.add('d-none');
+    if (cartFooter) cartFooter.classList.remove('d-none');
     
-    cartItems.innerHTML = cart.map(item => `
-      <div class="cart-item">
-        <div>
-          <h6>${item.name}</h6>
-          <small>Rs. ${item.price} x ${item.qty}</small>
+    if (cartItems) {
+      cartItems.innerHTML = cart.map(item => `
+        <div class="cart-item">
+          <div>
+            <h6>${item.name}</h6>
+            <small>Rs. ${item.price} x ${item.qty}</small>
+          </div>
+          <div class="cart-controls">
+            <button class="btn btn-sm btn-outline-secondary" onclick="changeQty(${item.id}, -1)">-</button>
+            <span class="mx-2">${item.qty}</span>
+            <button class="btn btn-sm btn-outline-secondary" onclick="changeQty(${item.id}, 1)">+</button>
+          </div>
         </div>
-        <div class="cart-controls">
-          <button class="btn btn-sm btn-outline-secondary" onclick="changeQty(${item.id}, -1)">-</button>
-          <span>${item.qty}</span>
-          <button class="btn btn-sm btn-outline-secondary" onclick="changeQty(${item.id}, 1)">+</button>
-        </div>
-      </div>
-    `).join('');
+      `).join('');
+    }
   }
 }
 
@@ -179,7 +189,18 @@ window.changeQty = function(id, delta) {
   updateCartUI();
 };
 
-// Modal & Overlay Handlers
+// Cart Drawer Functionality
+function toggleCart() {
+  const cartDrawer = document.getElementById('cartDrawer');
+  const drawerOverlay = document.getElementById('drawerOverlay');
+
+  if (cartDrawer && drawerOverlay) {
+    cartDrawer.classList.toggle('active');
+    drawerOverlay.classList.toggle('active');
+  }
+}
+
+// Modal Detail View
 window.openFoodDetail = function(id) {
   const item = foodData.find(f => f.id === id);
   document.getElementById('detailIcon').textContent = item.icon;
@@ -195,35 +216,49 @@ window.openFoodDetail = function(id) {
 };
 
 function setupEventListeners() {
-  // Sidebar Toggles
-  document.getElementById('menuToggle').onclick = () => {
-    sidebar.classList.add('active');
-    mobileOverlay.classList.add('active');
-  };
-  document.getElementById('sidebarClose').onclick = closeSidebar;
-  mobileOverlay.onclick = closeSidebar;
+  // Cart Trigger Events
+  const cartBtn = document.getElementById('cartBtn');
+  const closeCart = document.getElementById('closeCart');
+  const drawerOverlay = document.getElementById('drawerOverlay');
+
+  if (cartBtn) {
+    cartBtn.addEventListener('click', (e) => {
+      e.preventDefault();
+      toggleCart();
+    });
+  }
+  if (closeCart) closeCart.addEventListener('click', toggleCart);
+  if (drawerOverlay) drawerOverlay.addEventListener('click', toggleCart);
+
+  // Mobile Sidebar Toggles
+  const menuToggle = document.getElementById('menuToggle');
+  const sidebarClose = document.getElementById('sidebarClose');
+  const mobileOverlay = document.getElementById('mobileOverlay');
+
+  if (menuToggle) {
+    menuToggle.onclick = () => {
+      document.getElementById('sidebar')?.classList.add('active');
+      mobileOverlay?.classList.add('active');
+    };
+  }
+  
+  if (sidebarClose) sidebarClose.onclick = closeSidebar;
+  if (mobileOverlay) mobileOverlay.onclick = closeSidebar;
 
   function closeSidebar() {
-    sidebar.classList.remove('active');
-    mobileOverlay.classList.remove('active');
+    document.getElementById('sidebar')?.classList.remove('active');
+    mobileOverlay?.classList.remove('active');
   }
 
-  // Cart Drawer
-  document.getElementById('cartBtn').onclick = toggleCart;
-  document.getElementById('closeCart').onclick = toggleCart;
-  drawerOverlay.onclick = toggleCart;
-
-  function toggleCart() {
-    cartDrawer.classList.toggle('active');
-    drawerOverlay.classList.toggle('active');
+  // Search Input Filter
+  const searchInput = document.getElementById('searchInput');
+  if (searchInput) {
+    searchInput.addEventListener('input', (e) => {
+      renderMenu(e.target.value);
+    });
   }
 
-  // Search Input
-  document.getElementById('searchInput').addEventListener('input', (e) => {
-    renderMenu(e.target.value);
-  });
-
-  // Filter & Category Buttons
+  // Category & Filter Buttons
   document.querySelectorAll('.filter-btn, .category-card').forEach(btn => {
     btn.addEventListener('click', (e) => {
       document.querySelectorAll('.filter-btn, .category-card').forEach(b => b.classList.remove('active'));
@@ -237,78 +272,89 @@ function setupEventListeners() {
     });
   });
 
-  // Authentication Modals & Logic
+  // Auth Modal Controls
   const openAuth = () => authModal.show();
-  document.getElementById('sideLoginBtn').onclick = openAuth;
-  document.getElementById('profileLoginBtn').onclick = openAuth;
-  document.getElementById('profileBtn').onclick = openAuth;
+  document.getElementById('sideLoginBtn')?.addEventListener('click', openAuth);
+  document.getElementById('profileLoginBtn')?.addEventListener('click', openAuth);
+  document.getElementById('profileBtn')?.addEventListener('click', openAuth);
 
-  document.getElementById('switchAuth').onclick = (e) => {
-    const isSignup = document.querySelector('.signup-only').classList.toggle('d-none');
-    document.getElementById('authTitle').textContent = isSignup ? 'Login to Food Men' : 'Create Account';
-    e.target.textContent = isSignup ? 'Create account' : 'Already have an account? Login';
-  };
+  const switchAuth = document.getElementById('switchAuth');
+  if (switchAuth) {
+    switchAuth.onclick = (e) => {
+      e.preventDefault();
+      const signupField = document.querySelector('.signup-only');
+      const isSignup = signupField.classList.toggle('d-none');
+      document.getElementById('authTitle').textContent = !isSignup ? 'Create Account' : 'Login to Food Men';
+      e.target.textContent = !isSignup ? 'Already have an account? Login' : 'Create account';
+    };
+  }
 
-  document.getElementById('authSubmitBtn').onclick = () => {
+  document.getElementById('authSubmitBtn')?.addEventListener('click', () => {
     const email = document.getElementById('authEmail').value || 'User';
     currentUser = { name: email.split('@')[0], email: email };
     updateUserUI();
     authModal.hide();
     showToast(`Welcome back, ${currentUser.name}!`);
-  };
+  });
 
-  document.getElementById('logoutBtn').onclick = () => {
+  document.getElementById('logoutBtn')?.addEventListener('click', () => {
     currentUser = null;
     updateUserUI();
     showToast('Logged out successfully.');
-  };
+  });
 
-  // Vendor Add Logic
+  // Vendor Registration
   const openVendor = () => vendorModal.show();
-  document.getElementById('openVendorBtn').onclick = openVendor;
-  document.getElementById('openVendorBtn2').onclick = openVendor;
+  document.getElementById('openVendorBtn')?.addEventListener('click', openVendor);
+  document.getElementById('openVendorBtn2')?.addEventListener('click', openVendor);
 
-  document.getElementById('vendorForm').onsubmit = (e) => {
-    e.preventDefault();
-    const newVendor = {
-      id: Date.now(),
-      name: document.getElementById('vendorName').value,
-      type: document.getElementById('vendorType').value,
-      category: document.getElementById('vendorCategory').value,
-      phone: document.getElementById('vendorPhone').value,
-      address: document.getElementById('vendorAddress').value,
-      desc: document.getElementById('vendorDescription').value
+  const vendorForm = document.getElementById('vendorForm');
+  if (vendorForm) {
+    vendorForm.onsubmit = (e) => {
+      e.preventDefault();
+      const newVendor = {
+        id: Date.now(),
+        name: document.getElementById('vendorName').value,
+        type: document.getElementById('vendorType').value,
+        category: document.getElementById('vendorCategory').value,
+        phone: document.getElementById('vendorPhone').value,
+        address: document.getElementById('vendorAddress').value,
+        desc: document.getElementById('vendorDescription').value
+      };
+      vendorsData.push(newVendor);
+      renderVendors();
+      vendorModal.hide();
+      e.target.reset();
+      showToast('Vendor registered successfully!');
     };
-    vendorsData.push(newVendor);
-    renderVendors();
-    vendorModal.hide();
-    e.target.reset();
-    showToast('Vendor registered successfully!');
-  };
+  }
 
-  // Checkout Logic
-  document.getElementById('checkoutBtn').onclick = () => {
+  // Checkout Processing
+  document.getElementById('checkoutBtn')?.addEventListener('click', () => {
     toggleCart();
     checkoutModal.show();
-  };
+  });
 
-  document.getElementById('checkoutForm').onsubmit = (e) => {
-    e.preventDefault();
-    const subtotal = cart.reduce((acc, item) => acc + (item.price * item.qty), 0);
-    const newOrder = {
-      id: Math.floor(1000 + Math.random() * 9000),
-      items: [...cart],
-      total: subtotal + 150,
-      status: 'Preparing',
-      date: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+  const checkoutForm = document.getElementById('checkoutForm');
+  if (checkoutForm) {
+    checkoutForm.onsubmit = (e) => {
+      e.preventDefault();
+      const subtotal = cart.reduce((acc, item) => acc + (item.price * item.qty), 0);
+      const newOrder = {
+        id: Math.floor(1000 + Math.random() * 9000),
+        items: [...cart],
+        total: subtotal + 150,
+        status: 'Preparing',
+        date: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+      };
+      orders.unshift(newOrder);
+      cart = [];
+      updateCartUI();
+      renderOrders();
+      checkoutModal.hide();
+      showToast('Order placed successfully!');
     };
-    orders.unshift(newOrder);
-    cart = [];
-    updateCartUI();
-    renderOrders();
-    checkoutModal.hide();
-    showToast('Order placed successfully!');
-  };
+  }
 }
 
 function updateUserUI() {
@@ -318,21 +364,22 @@ function updateUserUI() {
     document.getElementById('profileEmail').textContent = currentUser.email;
     document.getElementById('topAvatar').textContent = currentUser.name[0].toUpperCase();
     document.getElementById('profileAvatar').textContent = currentUser.name[0].toUpperCase();
-    document.getElementById('profileLoginBtn').classList.add('d-none');
-    document.getElementById('logoutBtn').classList.remove('d-none');
+    document.getElementById('profileLoginBtn')?.classList.add('d-none');
+    document.getElementById('logoutBtn')?.classList.remove('d-none');
   } else {
     document.getElementById('topUserName').textContent = 'Guest';
     document.getElementById('profileName').textContent = 'Guest User';
     document.getElementById('profileEmail').textContent = 'Login to manage your account';
     document.getElementById('topAvatar').textContent = 'G';
     document.getElementById('profileAvatar').textContent = 'G';
-    document.getElementById('profileLoginBtn').classList.remove('d-none');
-    document.getElementById('logoutBtn').classList.add('d-none');
+    document.getElementById('profileLoginBtn')?.classList.remove('d-none');
+    document.getElementById('logoutBtn')?.classList.add('d-none');
   }
 }
 
 function showToast(message) {
   const toastEl = document.getElementById('appToast');
+  if (!toastEl) return;
   document.getElementById('toastMessage').textContent = message;
   const toast = new bootstrap.Toast(toastEl);
   toast.show();
