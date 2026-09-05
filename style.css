@@ -26,7 +26,6 @@ body {
   min-height: 100vh;
 }
 
-/* Sidebar Styling */
 .sidebar {
   width: 260px;
   background: var(--bg-card);
@@ -95,21 +94,18 @@ body {
   justify-content: center;
   gap: 8px;
   cursor: pointer;
-  transition: 0.2s;
 }
 
 .vendor-btn:hover, .login-side-btn:hover {
   background: var(--border-color);
 }
 
-/* Main Content Area */
 .main-content {
   margin-left: 260px;
   flex: 1;
   padding: 1.5rem 2rem;
 }
 
-/* Topbar Styling */
 .topbar {
   display: flex;
   justify-content: space-between;
@@ -190,31 +186,14 @@ body {
   font-weight: bold;
 }
 
-/* Hero Section Layout */
 .hero-section {
   display: flex;
   justify-content: space-between;
   align-items: center;
   background: var(--bg-card);
-  border-radius: 20px;
-  padding: 3.5rem 3rem;
+  border-radius: 16px;
+  padding: 3rem;
   margin-bottom: 3rem;
-  gap: 2.5rem;
-  position: relative;
-  overflow: hidden;
-  border: 1px solid var(--border-color);
-}
-
-.hero-badge {
-  background: rgba(255, 87, 34, 0.15);
-  color: var(--primary);
-  padding: 0.4rem 0.8rem;
-  border-radius: 20px;
-  font-size: 0.85rem;
-  font-weight: 600;
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
 }
 
 .hero-content h1 {
@@ -227,167 +206,39 @@ body {
   color: var(--primary);
 }
 
-.hero-content p {
-  color: var(--text-muted);
-  max-width: 480px;
-  font-size: 1rem;
-}
-
-.hero-actions {
-  display: flex;
-  gap: 12px;
-  margin-top: 1.5rem;
-}
-
-/* Hero Food Container - Wide Layout */
-.hero-food {
-  position: relative;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 100%;
-  max-width: 520px;
-  height: 320px;
-  flex-shrink: 0;
-}
-
-.hero-circle {
-  position: absolute;
-  width: 440px;
-  height: 280px;
-  background: radial-gradient(ellipse at center, rgba(255, 87, 34, 0.25) 0%, rgba(0, 0, 0, 0) 70%);
-  border-radius: 50%;
-  z-index: 1;
-}
-
-.hero-img-box {
-  width: 100%;
-  height: 300px;
-  border-radius: 24px;
-  overflow: hidden;
-  position: relative;
-  z-index: 2;
-  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.6);
-  border: 2px solid rgba(255, 255, 255, 0.08);
-  transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.4s ease, border-color 0.4s ease;
-}
-
-.hero-img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  object-position: center;
-  display: block;
-  transition: transform 0.5s ease;
-}
-
-.hero-img-box:hover {
-  transform: translateY(-6px) scale(1.02);
-  box-shadow: 0 20px 45px rgba(255, 87, 34, 0.35);
-  border-color: var(--primary);
-}
-
-.hero-img-box:hover .hero-img {
-  transform: scale(1.06);
-}
-
-/* Floating Badges */
-.floating-card {
-  position: absolute;
-  background: rgba(26, 26, 26, 0.9);
-  backdrop-filter: blur(12px);
-  border: 1px solid var(--border-color);
-  padding: 0.5rem 0.9rem;
-  border-radius: 30px;
-  font-size: 0.8rem;
-  font-weight: 600;
-  color: var(--text-main);
-  z-index: 3;
-  box-shadow: 0 8px 20px rgba(0,0,0,0.4);
-  transition: transform 0.3s ease, border-color 0.3s ease;
-}
-
-.card-one {
-  top: 0px;
-  right: -10px;
-}
-
-.card-two {
-  bottom: 0px;
-  left: -10px;
-}
-
-.floating-card:hover {
-  transform: translateY(-3px);
-  border-color: var(--primary);
-}
-
-/* Button Stylings */
 .primary-btn {
   background: var(--primary);
   color: #fff;
   border: none;
-  padding: 0.7rem 1.4rem;
+  padding: 0.6rem 1.2rem;
   border-radius: 8px;
   text-decoration: none;
   display: inline-flex;
   align-items: center;
   gap: 8px;
   cursor: pointer;
-  transition: all 0.2s ease;
 }
 
 .primary-btn:hover {
   background: var(--primary-hover);
   color: #fff;
-  transform: translateY(-2px);
-  box-shadow: 0 6px 15px rgba(255, 87, 34, 0.4);
 }
 
 .secondary-btn, .outline-btn {
   border: 1px solid var(--border-color);
   color: var(--text-main);
-  padding: 0.7rem 1.4rem;
+  padding: 0.6rem 1.2rem;
   border-radius: 8px;
   text-decoration: none;
   background: transparent;
   cursor: pointer;
-  transition: all 0.2s ease;
 }
 
-.secondary-btn:hover, .outline-btn:hover {
-  background: var(--border-color);
-  color: #fff;
-  transform: translateY(-2px);
-}
-
-/* Section Blocks & Headings */
-.section-block {
-  margin-bottom: 3rem;
-}
-
-.section-heading {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-end;
-  margin-bottom: 1.5rem;
-}
-
-.eyebrow {
-  color: var(--primary);
-  font-size: 0.85rem;
-  text-transform: uppercase;
-  font-weight: 700;
-  letter-spacing: 1px;
-}
-
-/* Categories & Filter Grid */
 .category-grid, .filter-buttons {
   display: flex;
   gap: 12px;
   overflow-x: auto;
   margin-bottom: 2rem;
-  padding-bottom: 5px;
 }
 
 .category-card, .filter-btn {
@@ -398,20 +249,13 @@ body {
   border-radius: 12px;
   cursor: pointer;
   white-space: nowrap;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  transition: all 0.2s ease;
 }
 
-.category-card:hover, .filter-btn:hover,
 .category-card.active, .filter-btn.active {
   background: var(--primary);
   border-color: var(--primary);
-  color: #fff;
 }
 
-/* Main Food & Vendor Cards Grid */
 .food-grid, .vendor-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
@@ -424,36 +268,15 @@ body {
   border: 1px solid var(--border-color);
   border-radius: 12px;
   padding: 1.2rem;
-  transition: transform 0.3s ease, border-color 0.3s ease;
 }
 
-.food-card:hover, .vendor-card:hover {
-  transform: translateY(-5px);
-  border-color: var(--primary);
-}
-
-/* Food Image Box */
-.food-img-wrap {
-  width: 100%;
-  height: 160px;
-  overflow: hidden;
-  border-radius: 8px;
+.food-icon {
+  font-size: 4rem;
+  text-align: center;
   cursor: pointer;
-  margin-bottom: 1rem;
 }
 
-.food-img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  transition: transform 0.3s ease;
-}
-
-.food-card:hover .food-img {
-  transform: scale(1.05);
-}
-
-/* Cart & Drawers */
+/* Sliding Cart Drawer */
 .cart-drawer {
   position: fixed;
   right: -420px;
@@ -489,6 +312,21 @@ body {
   display: block !important;
 }
 
+.mobile-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0,0,0,0.7);
+  z-index: 999;
+  display: none;
+}
+
+.mobile-overlay.active {
+  display: block;
+}
+
 .cart-items {
   flex: 1;
   overflow-y: auto;
@@ -503,13 +341,6 @@ body {
   border-bottom: 1px solid var(--border-color);
 }
 
-.cart-item-img {
-  width: 50px;
-  height: 50px;
-  border-radius: 6px;
-  object-fit: cover;
-}
-
 .close-btn {
   background: transparent;
   border: none;
@@ -518,7 +349,6 @@ body {
   cursor: pointer;
 }
 
-/* Modals & Forms */
 .custom-modal {
   background: var(--bg-card);
   color: var(--text-main);
@@ -538,50 +368,6 @@ body {
   box-shadow: none;
 }
 
-/* Centered & Solid Toast Notification */
-.toast-notification, 
-.toast, 
-[role="alert"] {
-  position: fixed !important;
-  bottom: 35px !important;
-  left: 50% !important;
-  transform: translateX(-50%) !important;
-  background-color: #242424 !important; /* Solid Dark Gray */
-  color: #ffffff !important;
-  border: 1px solid var(--primary) !important;
-  border-left: 5px solid #2e7d32 !important;
-  padding: 12px 24px !important;
-  border-radius: 30px !important;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.9), 0 0 15px rgba(255, 87, 34, 0.25) !important;
-  z-index: 999999 !important;
-  font-weight: 600;
-  display: flex !important;
-  align-items: center !important;
-  gap: 10px !important;
-  backdrop-filter: none !important;
-  white-space: nowrap;
-}
-
-/* Footer */
-footer {
-  margin-top: 3rem;
-  padding-top: 2rem;
-  border-top: 1px solid var(--border-color);
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  color: var(--text-muted);
-  font-size: 0.9rem;
-}
-
-.footer-brand {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  color: var(--text-main);
-}
-
-/* Mobile Responsive */
 @media (max-width: 992px) {
   .sidebar {
     transform: translateX(-100%);
@@ -591,21 +377,6 @@ footer {
   }
   .main-content {
     margin-left: 0;
-  }
-  .hero-section {
-    flex-direction: column;
-    text-align: center;
-    padding: 2rem;
-  }
-  .hero-actions {
-    justify-content: center;
-  }
-  .hero-food {
-    max-width: 100%;
-    height: 260px;
-  }
-  .hero-img-box {
-    height: 240px;
   }
   .cart-drawer {
     width: 100%;
