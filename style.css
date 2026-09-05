@@ -239,7 +239,7 @@ body {
   margin-top: 1.5rem;
 }
 
-/* Hero Food Container - Extra Wide Layout */
+/* Hero Food Container - Wide Layout */
 .hero-food {
   position: relative;
   display: flex;
@@ -260,7 +260,6 @@ body {
   z-index: 1;
 }
 
-/* Wide Image Box */
 .hero-img-box {
   width: 100%;
   height: 300px;
@@ -282,7 +281,6 @@ body {
   transition: transform 0.5s ease;
 }
 
-/* Smooth Hover Animation */
 .hero-img-box:hover {
   transform: translateY(-6px) scale(1.02);
   box-shadow: 0 20px 45px rgba(255, 87, 34, 0.35);
@@ -293,7 +291,7 @@ body {
   transform: scale(1.06);
 }
 
-/* Floating Badges Alignment */
+/* Floating Badges */
 .floating-card {
   position: absolute;
   background: rgba(26, 26, 26, 0.9);
@@ -324,7 +322,7 @@ body {
   border-color: var(--primary);
 }
 
-/* Button Stylings & Hovers */
+/* Button Stylings */
 .primary-btn {
   background: var(--primary);
   color: #fff;
@@ -538,6 +536,30 @@ body {
   color: var(--text-main);
   border-color: var(--primary);
   box-shadow: none;
+}
+
+/* Centered & Solid Toast Notification */
+.toast-notification, 
+.toast, 
+[role="alert"] {
+  position: fixed !important;
+  bottom: 35px !important;
+  left: 50% !important;
+  transform: translateX(-50%) !important;
+  background-color: #242424 !important; /* Solid Dark Gray */
+  color: #ffffff !important;
+  border: 1px solid var(--primary) !important;
+  border-left: 5px solid #2e7d32 !important;
+  padding: 12px 24px !important;
+  border-radius: 30px !important;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.9), 0 0 15px rgba(255, 87, 34, 0.25) !important;
+  z-index: 999999 !important;
+  font-weight: 600;
+  display: flex !important;
+  align-items: center !important;
+  gap: 10px !important;
+  backdrop-filter: none !important;
+  white-space: nowrap;
 }
 
 /* Footer */
