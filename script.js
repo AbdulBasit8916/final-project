@@ -1,99 +1,395 @@
-// Food Items Data
-const foods = [
-  { id: 1, name: "Zinger Burger", category: "burgers", price: "$5.99", img: "https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=400" },
-  { id: 2, name: "Cheese Pizza", category: "pizza", price: "$9.99", img: "https://images.unsplash.com/photo-1513104890138-7c749659a591?w=400" },
-  { id: 3, name: "Fried Chicken", category: "chicken", price: "$7.50", img: "https://images.unsplash.com/photo-1626645738196-c2a7c87a8f58?w=400" },
-  { id: 4, name: "Chocolate Cake", category: "desserts", price: "$4.00", img: "https://images.unsplash.com/photo-1578985545062-69928b1d9587?w=400" },
-  { id: 5, name: "Cold Drink", category: "drinks", price: "$1.50", img: "https://images.unsplash.com/photo-1622483767028-3f66f32aef97?w=400" }
+// Data Models
+const foodData = [
+  { id: 1, name: 'Zinger Burger', category: 'Burgers', price: 550, icon: '🍔', desc: 'Crispy fried chicken thigh patty with mayo and lettuce.' },
+  { id: 2, name: 'Beef Smash Burger', category: 'Burgers', price: 750, icon: '🍔', desc: 'Double beef patty with melted cheddar and special sauce.' },
+  { id: 3, name: 'Chicken Tikka Pizza', category: 'Pizza', price: 1200, icon: '🍕', desc: 'Topped with spicy tikka chicken, onions, and mozzarella.' },
+  { id: 4, name: 'Pepperoni Delight', category: 'Pizza', price: 1400, icon: '🍕', desc: 'Classic pepperoni with rich tomato sauce and extra cheese.' },
+  { id: 5, name: 'Crispy Fried Chicken', category: 'Chicken', price: 850, icon: '🍗', desc: '4 pieces of hot & spicy golden fried chicken.' },
+  { id: 6, name: 'Chocolate Lava Cake', category: 'Desserts', price: 450, icon: '🍰', desc: 'Warm chocolate cake with a molten chocolate center.' },
+  { id: 7, name: 'Cold Coffee', category: 'Drinks', price: 350, icon: '🥤', desc: 'Chilled espresso blended with milk and ice cream.' }
 ];
 
-// Vendor Data
-const vendors = [
-  { id: 1, name: "KFC Fast Food", desc: "Fast Food • 15 min", img: "https://images.unsplash.com/photo-1550547660-d9450f859349?w=400" },
-  { id: 2, name: "Pizza Max", desc: "Italian • 25 min", img: "https://images.unsplash.com/photo-1590947132387-155cc02f3212?w=400" }
+let vendorsData = [
+  { id: 1, name: 'Burger Lab', type: 'Restaurant', category: 'Fast Food', phone: '+92 300 1234567', address: 'Block 4, Clifton', desc: 'Best smash burgers in town.' },
+  { id: 2, name: 'Pizza Max', type: 'Restaurant', category: 'Italian / Fast Food', phone: '+92 321 9876543', address: 'DHA Phase 5', desc: 'Authentic cheesy pizzas.' }
 ];
 
-let cartCount = 0;
+// Application State
+let cart = [];
+let orders = [];
+let currentUser = null;
+let activeFilter = 'All';
 
-// Render Food Cards
-function renderFoods(items) {
-  const container = document.getElementById("foodGrid");
-  container.innerHTML = items.map(food => `
-    <div class="card">
-      <img src="${food.img}" alt="${food.name}">
-      <div class="card-body">
-        <div class="card-title">${food.name}</div>
-        <div class="card-action">
-          <span class="card-price">${food.price}</span>
-          <button class="add-btn" onclick="addToCart('${food.name}')">Add +</button>
+// Global Modals
+let authModal, vendorModal, checkoutModal, foodModal;
+
+// Initialize when DOM is completely loaded
+document.addEventListener('DOMContentLoaded', () => {
+  // Safe Bootstrap Modals Initialization
+  const authEl = document.getElementById('authModal');
+  const vendorEl = document.getElementById('vendorModal');
+  const checkoutEl = document.getElementById('checkoutModal');
+  const foodEl = document.getElementById('foodModal');
+
+  if (authEl) authModal = new bootstrap.Modal(authEl);
+  if (vendorEl) vendorModal = new bootstrap.Modal(vendorEl);
+  if (checkoutEl) checkoutModal = new bootstrap.Modal(checkoutEl);
+  if (foodEl) foodModal = new bootstrap.Modal(foodEl);
+
+  renderMenu();
+  renderVendors();
+  renderOrders();
+  setupEventListeners();
+});
+
+// Render Menu Items
+function renderMenu(searchTerm = '') {
+  const foodGrid = document.getElementById('foodGrid');
+  if (!foodGrid) return;
+
+  foodGrid.innerHTML = '';
+  
+  const filtered = foodData.filter(item => {
+    const matchesFilter = activeFilter === 'All' || item.category === activeFilter;
+    const matchesSearch = item.name.toLowerCase().includes(searchTerm.toLowerCase());
+    return matchesFilter && matchesSearch;
+  });
+
+  if (filtered.length === 0) {
+    foodGrid.innerHTML = `<p class="text-muted col-12">No food items found.</p>`;
+    return;
+  }
+
+  filtered.forEach(item => {
+    const card = document.createElement('div');
+    card.className = 'food-card';
+    card.innerHTML = `
+      <div class="food-icon" onclick="openFoodDetail(${item.id})">${item.icon}</div>
+      <div class="food-info">
+        <h5>${item.name}</h5>
+        <span class="badge bg-light text-dark mb-2">${item.category}</span>
+        <div class="d-flex justify-content-between align-items-center mt-2">
+          <strong>Rs. ${item.price}</strong>
+          <button class="btn btn-sm primary-btn" onclick="addToCart(${item.id})">
+            <i class="bi bi-plus-lg"></i> Add
+          </button>
         </div>
       </div>
-    </div>
-  `).join('');
+    `;
+    foodGrid.appendChild(card);
+  });
 }
 
 // Render Vendors
 function renderVendors() {
-  const container = document.getElementById("vendorGrid");
-  container.innerHTML = vendors.map(v => `
-    <div class="card">
-      <img src="${v.img}" alt="${v.name}">
-      <div class="card-body">
-        <div class="card-title">${v.name}</div>
-        <div style="font-size: 11px; color: #808191;">${v.desc}</div>
-      </div>
-    </div>
-  `).join('');
+  const vendorGrid = document.getElementById('vendorGrid');
+  if (!vendorGrid) return;
+
+  vendorGrid.innerHTML = '';
+  vendorsData.forEach(v => {
+    const card = document.createElement('div');
+    card.className = 'vendor-card';
+    card.innerHTML = `
+      <h4>${v.name}</h4>
+      <span class="eyebrow">${v.type} • ${v.category}</span>
+      <p class="mt-2 mb-1"><i class="bi bi-geo-alt"></i> ${v.address}</p>
+      <p><i class="bi bi-telephone"></i> ${v.phone}</p>
+      <small class="text-muted">${v.desc}</small>
+    `;
+    vendorGrid.appendChild(card);
+  });
 }
 
-// Button Functionalities
-function filterCategory(cat, element) {
-  document.querySelectorAll('.cat-btn').forEach(btn => btn.classList.remove('active'));
-  if (element) element.classList.add('active');
+// Render Orders
+function renderOrders() {
+  const ordersContainer = document.getElementById('ordersContainer');
+  if (!ordersContainer) return;
 
-  if (cat === 'all') {
-    renderFoods(foods);
+  ordersContainer.innerHTML = '';
+  if (orders.length === 0) {
+    ordersContainer.innerHTML = `<p class="text-muted">No recent orders found.</p>`;
+    return;
+  }
+
+  orders.forEach(order => {
+    const card = document.createElement('div');
+    card.className = 'order-card';
+    card.innerHTML = `
+      <div class="d-flex justify-content-between align-items-center mb-2">
+        <strong>Order #${order.id}</strong>
+        <span class="badge bg-success">${order.status}</span>
+      </div>
+      <p class="mb-1 text-muted">${order.items.map(i => `${i.qty}x ${i.name}`).join(', ')}</p>
+      <div class="d-flex justify-content-between">
+        <small>${order.date}</small>
+        <strong>Rs. ${order.total}</strong>
+      </div>
+    `;
+    ordersContainer.appendChild(card);
+  });
+}
+
+// Cart System Global Methods
+window.addToCart = function(id) {
+  const item = foodData.find(f => f.id === id);
+  const existing = cart.find(c => c.id === id);
+  if (existing) {
+    existing.qty++;
   } else {
-    const filtered = foods.filter(f => f.category === cat);
-    renderFoods(filtered);
+    cart.push({ ...item, qty: 1 });
+  }
+  updateCartUI();
+  showToast(`${item.name} added to cart!`);
+};
+
+window.changeQty = function(id, delta) {
+  const item = cart.find(c => c.id === id);
+  if (item) {
+    item.qty += delta;
+    if (item.qty <= 0) {
+      cart = cart.filter(c => c.id !== id);
+    }
+  }
+  updateCartUI();
+};
+
+function updateCartUI() {
+  const cartCount = document.getElementById('cartCount');
+  const cartSubtotal = document.getElementById('cartSubtotal');
+  const cartTotal = document.getElementById('cartTotal');
+  const checkoutTotal = document.getElementById('checkoutTotal');
+  const cartItems = document.getElementById('cartItems');
+  const cartEmpty = document.getElementById('cartEmpty');
+  const cartFooter = document.getElementById('cartFooter');
+
+  const totalCount = cart.reduce((acc, item) => acc + item.qty, 0);
+  const subtotal = cart.reduce((acc, item) => acc + (item.price * item.qty), 0);
+  const total = subtotal > 0 ? subtotal + 150 : 0;
+
+  if (cartCount) cartCount.textContent = totalCount;
+  if (cartSubtotal) cartSubtotal.textContent = `Rs. ${subtotal}`;
+  if (cartTotal) cartTotal.textContent = `Rs. ${total}`;
+  if (checkoutTotal) checkoutTotal.textContent = `Rs. ${total}`;
+
+  if (cart.length === 0) {
+    if (cartEmpty) cartEmpty.classList.remove('d-none');
+    if (cartFooter) cartFooter.classList.add('d-none');
+    if (cartItems) cartItems.innerHTML = '';
+  } else {
+    if (cartEmpty) cartEmpty.classList.add('d-none');
+    if (cartFooter) cartFooter.classList.remove('d-none');
+    
+    if (cartItems) {
+      cartItems.innerHTML = cart.map(item => `
+        <div class="cart-item">
+          <div>
+            <h6 class="mb-0">${item.name}</h6>
+            <small class="text-muted">Rs. ${item.price} x ${item.qty}</small>
+          </div>
+          <div class="cart-controls d-flex align-items-center gap-2">
+            <button class="btn btn-sm btn-outline-secondary py-0 px-2" onclick="changeQty(${item.id}, -1)">-</button>
+            <span>${item.qty}</span>
+            <button class="btn btn-sm btn-outline-secondary py-0 px-2" onclick="changeQty(${item.id}, 1)">+</button>
+          </div>
+        </div>
+      `).join('');
+    }
   }
 }
 
-function handleSearch() {
-  const query = document.getElementById('searchInput').value.toLowerCase();
-  const filtered = foods.filter(f => f.name.toLowerCase().includes(query));
-  renderFoods(filtered);
+// Cart Drawer Open/Close Handler
+function toggleCart() {
+  const cartDrawer = document.getElementById('cartDrawer');
+  const drawerOverlay = document.getElementById('drawerOverlay');
+
+  if (cartDrawer && drawerOverlay) {
+    cartDrawer.classList.toggle('active');
+    drawerOverlay.classList.toggle('active');
+  }
 }
 
-function addToCart(itemName) {
-  cartCount++;
-  document.getElementById('cartCount').innerText = cartCount;
-  alert(`${itemName} cart mein add ho gaya hai!`);
-}
-
-function openCart() {
-  alert(`Aapke cart mein total ${cartCount} items hain.`);
-}
-
-function setActiveNav(element) {
-  document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
-  element.classList.add('active');
-}
-
-function scrollToSection(id) {
-  document.getElementById(id).scrollIntoView({ behavior: 'smooth' });
-}
-
-function triggerAddVendor() {
-  alert("Add Vendor form option open ho gaya hai.");
-}
-
-function triggerLogin() {
-  alert("Login Page / Modal redirect.");
-}
-
-// Initialization
-window.onload = () => {
-  renderFoods(foods);
-  renderVendors();
+// Food Modal View
+window.openFoodDetail = function(id) {
+  const item = foodData.find(f => f.id === id);
+  document.getElementById('detailIcon').textContent = item.icon;
+  document.getElementById('detailCategory').textContent = item.category;
+  document.getElementById('detailName').textContent = item.name;
+  document.getElementById('detailDescription').textContent = item.desc;
+  document.getElementById('detailPrice').textContent = `Rs. ${item.price}`;
+  
+  const addBtn = document.getElementById('detailAddBtn');
+  addBtn.onclick = () => {
+    addToCart(item.id);
+    if (foodModal) foodModal.hide();
+  };
+  
+  if (foodModal) foodModal.show();
 };
+
+// All Event Listeners Setup
+function setupEventListeners() {
+  // 1. Cart Button Trigger
+  const cartBtn = document.getElementById('cartBtn');
+  const closeCart = document.getElementById('closeCart');
+  const drawerOverlay = document.getElementById('drawerOverlay');
+
+  if (cartBtn) {
+    cartBtn.onclick = (e) => {
+      e.preventDefault();
+      toggleCart();
+    };
+  }
+  if (closeCart) closeCart.onclick = toggleCart;
+  if (drawerOverlay) drawerOverlay.onclick = toggleCart;
+
+  // 2. Mobile Navigation
+  const menuToggle = document.getElementById('menuToggle');
+  const sidebarClose = document.getElementById('sidebarClose');
+  const mobileOverlay = document.getElementById('mobileOverlay');
+
+  if (menuToggle) {
+    menuToggle.onclick = () => {
+      document.getElementById('sidebar')?.classList.add('active');
+      mobileOverlay?.classList.add('active');
+    };
+  }
+  if (sidebarClose) sidebarClose.onclick = closeSidebar;
+  if (mobileOverlay) mobileOverlay.onclick = closeSidebar;
+
+  function closeSidebar() {
+    document.getElementById('sidebar')?.classList.remove('active');
+    mobileOverlay?.classList.remove('active');
+  }
+
+  // 3. Search Bar
+  const searchInput = document.getElementById('searchInput');
+  if (searchInput) {
+    searchInput.oninput = (e) => renderMenu(e.target.value);
+  }
+
+  // 4. Category Filters
+  document.querySelectorAll('.filter-btn, .category-card').forEach(btn => {
+    btn.onclick = (e) => {
+      document.querySelectorAll('.filter-btn, .category-card').forEach(b => b.classList.remove('active'));
+      const category = e.currentTarget.dataset.category || e.currentTarget.dataset.filter;
+      activeFilter = category;
+      
+      document.querySelectorAll(`[data-filter="${category}"], [data-category="${category}"]`)
+        .forEach(b => b.classList.add('active'));
+      
+      renderMenu();
+    };
+  });
+
+  // 5. Auth Modal Actions
+  const openAuth = () => { if (authModal) authModal.show(); };
+  document.getElementById('sideLoginBtn')?.addEventListener('click', openAuth);
+  document.getElementById('profileLoginBtn')?.addEventListener('click', openAuth);
+  document.getElementById('profileBtn')?.addEventListener('click', openAuth);
+
+  const switchAuth = document.getElementById('switchAuth');
+  if (switchAuth) {
+    switchAuth.onclick = (e) => {
+      e.preventDefault();
+      const signupField = document.querySelector('.signup-only');
+      const isHidden = signupField.classList.toggle('d-none');
+      document.getElementById('authTitle').textContent = isHidden ? 'Login to Food Men' : 'Create Account';
+      e.target.textContent = isHidden ? 'Create account' : 'Already have an account? Login';
+    };
+  }
+
+  document.getElementById('authSubmitBtn')?.addEventListener('click', () => {
+    const email = document.getElementById('authEmail').value || 'User';
+    currentUser = { name: email.split('@')[0], email: email };
+    updateUserUI();
+    if (authModal) authModal.hide();
+    showToast(`Welcome back, ${currentUser.name}!`);
+  });
+
+  document.getElementById('logoutBtn')?.addEventListener('click', () => {
+    currentUser = null;
+    updateUserUI();
+    showToast('Logged out successfully.');
+  });
+
+  // 6. Vendor Registration
+  const openVendor = () => { if (vendorModal) vendorModal.show(); };
+  document.getElementById('openVendorBtn')?.addEventListener('click', openVendor);
+  document.getElementById('openVendorBtn2')?.addEventListener('click', openVendor);
+
+  const vendorForm = document.getElementById('vendorForm');
+  if (vendorForm) {
+    vendorForm.onsubmit = (e) => {
+      e.preventDefault();
+      const newVendor = {
+        id: Date.now(),
+        name: document.getElementById('vendorName').value,
+        type: document.getElementById('vendorType').value,
+        category: document.getElementById('vendorCategory').value,
+        phone: document.getElementById('vendorPhone').value,
+        address: document.getElementById('vendorAddress').value,
+        desc: document.getElementById('vendorDescription').value
+      };
+      vendorsData.push(newVendor);
+      renderVendors();
+      if (vendorModal) vendorModal.hide();
+      e.target.reset();
+      showToast('Vendor registered successfully!');
+    };
+  }
+
+  // 7. Checkout Flow
+  document.getElementById('checkoutBtn')?.addEventListener('click', () => {
+    toggleCart();
+    if (checkoutModal) checkoutModal.show();
+  });
+
+  const checkoutForm = document.getElementById('checkoutForm');
+  if (checkoutForm) {
+    checkoutForm.onsubmit = (e) => {
+      e.preventDefault();
+      const subtotal = cart.reduce((acc, item) => acc + (item.price * item.qty), 0);
+      const newOrder = {
+        id: Math.floor(1000 + Math.random() * 9000),
+        items: [...cart],
+        total: subtotal + 150,
+        status: 'Preparing',
+        date: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+      };
+      orders.unshift(newOrder);
+      cart = [];
+      updateCartUI();
+      renderOrders();
+      if (checkoutModal) checkoutModal.hide();
+      showToast('Order placed successfully!');
+    };
+  }
+}
+
+function updateUserUI() {
+  if (currentUser) {
+    document.getElementById('topUserName').textContent = currentUser.name;
+    document.getElementById('profileName').textContent = currentUser.name;
+    document.getElementById('profileEmail').textContent = currentUser.email;
+    document.getElementById('topAvatar').textContent = currentUser.name[0].toUpperCase();
+    document.getElementById('profileAvatar').textContent = currentUser.name[0].toUpperCase();
+    document.getElementById('profileLoginBtn')?.classList.add('d-none');
+    document.getElementById('logoutBtn')?.classList.remove('d-none');
+  } else {
+    document.getElementById('topUserName').textContent = 'Guest';
+    document.getElementById('profileName').textContent = 'Guest User';
+    document.getElementById('profileEmail').textContent = 'Login to manage your account';
+    document.getElementById('topAvatar').textContent = 'G';
+    document.getElementById('profileAvatar').textContent = 'G';
+    document.getElementById('profileLoginBtn')?.classList.remove('d-none');
+    document.getElementById('logoutBtn')?.classList.add('d-none');
+  }
+}
+
+function showToast(message) {
+  const toastEl = document.getElementById('appToast');
+  if (!toastEl) return;
+  document.getElementById('toastMessage').textContent = message;
+  const toast = new bootstrap.Toast(toastEl);
+  toast.show();
+}
