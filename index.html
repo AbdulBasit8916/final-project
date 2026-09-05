@@ -188,7 +188,7 @@
 </div>
 
 <div class="cart-drawer" id="cartDrawer">
-    <div class="cart-header">
+    <div class="cart-header d-flex justify-content-between align-items-center">
         <div>
             <span class="eyebrow">Your Order</span>
             <h3>Shopping Cart</h3>
@@ -199,16 +199,16 @@
     <div class="cart-items" id="cartItems"></div>
 
     <div class="cart-empty" id="cartEmpty">
-        <i class="bi bi-bag-x"></i>
+        <i class="bi bi-bag-x fs-1"></i>
         <h4>Your cart is empty</h4>
         <p>Add something delicious from the menu.</p>
     </div>
 
-    <div class="cart-footer" id="cartFooter">
-        <div class="price-row"><span>Subtotal</span><strong id="cartSubtotal">Rs. 0</strong></div>
-        <div class="price-row"><span>Delivery</span><strong id="deliveryFee">Rs. 150</strong></div>
-        <div class="price-row total"><span>Total</span><strong id="cartTotal">Rs. 0</strong></div>
-        <button class="checkout-btn" id="checkoutBtn">Proceed to Checkout <i class="bi bi-arrow-right"></i></button>
+    <div class="cart-footer d-none" id="cartFooter">
+        <div class="price-row d-flex justify-content-between my-1"><span>Subtotal</span><strong id="cartSubtotal">Rs. 0</strong></div>
+        <div class="price-row d-flex justify-content-between my-1"><span>Delivery</span><strong id="deliveryFee">Rs. 150</strong></div>
+        <div class="price-row total d-flex justify-content-between my-2 border-top pt-2"><span>Total</span><strong id="cartTotal">Rs. 0</strong></div>
+        <button class="primary-btn w-100 justify-content-center mt-3" id="checkoutBtn">Proceed to Checkout <i class="bi bi-arrow-right"></i></button>
     </div>
 </div>
 
@@ -227,37 +227,28 @@
 
     <div class="modal-body">
         <div id="authForm">
-            <div class="form-group signup-only d-none">
+            <div class="form-group signup-only d-none mb-3">
                 <label>Full Name</label>
                 <input type="text" id="authName" class="form-control" placeholder="Your name">
             </div>
 
-            <div class="form-group">
+            <div class="form-group mb-3">
                 <label>Email Address</label>
                 <input type="email" id="authEmail" class="form-control" placeholder="you@example.com">
             </div>
 
-            <div class="form-group">
+            <div class="form-group mb-3">
                 <label>Password</label>
                 <div class="password-wrap">
                     <input type="password" id="authPassword" class="form-control" placeholder="Enter password">
-                    <button type="button" id="togglePassword"><i class="bi bi-eye"></i></button>
                 </div>
             </div>
 
-            <button class="primary-btn w-100 justify-content-center" id="authSubmitBtn">Login</button>
+            <button class="primary-btn w-100 justify-content-center mt-2" id="authSubmitBtn">Login</button>
 
-            <button class="text-btn forgot-btn" id="forgotBtn">Forgot password?</button>
-
-            <div class="divider"><span>or</span></div>
-
-            <button class="guest-btn" id="guestBtn">
-                <i class="bi bi-person"></i> Continue as Guest
-            </button>
-
-            <p class="auth-switch" id="authSwitchText">
-                Don't have an account?
-                <button id="switchAuth">Create account</button>
+            <p class="auth-switch text-center mt-3" id="authSwitchText">
+                Don't have an account? 
+                <button class="btn btn-link p-0 text-decoration-none" id="switchAuth">Create account</button>
             </p>
         </div>
     </div>
@@ -305,8 +296,8 @@
                 </div>
 
                 <div class="col-md-6">
-                    <label>Phone</label>
-                    <input id="vendorPhone" class="form-control" placeholder="+92 300 0000000">
+                    <label>Phone Number (11 Digits)</label>
+                    <input id="vendorPhone" type="tel" maxlength="11" class="form-control" required placeholder="03000000000">
                 </div>
 
                 <div class="col-12">
@@ -316,7 +307,7 @@
 
                 <div class="col-12">
                     <label>Description</label>
-                    <textarea id="vendorDescription" class="form-control" rows="4" placeholder="Tell customers about your vendor"></textarea>
+                    <textarea id="vendorDescription" class="form-control" rows="3" placeholder="Tell customers about your vendor"></textarea>
                 </div>
             </div>
 
@@ -342,17 +333,17 @@
 
     <div class="modal-body">
         <form id="checkoutForm">
-            <div class="form-group">
+            <div class="form-group mb-3">
                 <label>Delivery Address</label>
                 <textarea id="deliveryAddress" class="form-control" required placeholder="Enter complete delivery address"></textarea>
             </div>
 
-            <div class="form-group">
-                <label>Phone Number</label>
-                <input id="deliveryPhone" class="form-control" required placeholder="+92 300 0000000">
+            <div class="form-group mb-3">
+                <label>Phone Number (11 Digits)</label>
+                <input id="deliveryPhone" type="tel" maxlength="11" class="form-control" required placeholder="03000000000">
             </div>
 
-            <div class="form-group">
+            <div class="form-group mb-3">
                 <label>Payment Method</label>
                 <select id="paymentMethod" class="form-select">
                     <option>Cash on Delivery</option>
@@ -360,7 +351,7 @@
                 </select>
             </div>
 
-            <div class="checkout-summary">
+            <div class="checkout-summary d-flex justify-content-between my-3 p-2 bg-dark rounded">
                 <span>Total Payable</span>
                 <strong id="checkoutTotal">Rs. 0</strong>
             </div>
@@ -376,14 +367,14 @@
 
 <div class="modal fade" id="foodModal" tabindex="-1">
 <div class="modal-dialog modal-dialog-centered">
-<div class="modal-content custom-modal">
-    <div class="food-detail">
-        <div class="food-detail-icon" id="detailIcon">🍔</div>
+<div class="modal-content custom-modal p-3">
+    <div class="food-detail text-center">
+        <div class="food-detail-icon display-1" id="detailIcon">🍔</div>
         <span class="eyebrow" id="detailCategory">Food</span>
         <h3 id="detailName">Food Name</h3>
-        <p id="detailDescription"></p>
-        <div class="detail-bottom">
-            <strong id="detailPrice">Rs. 0</strong>
+        <p id="detailDescription" class="text-muted"></p>
+        <div class="detail-bottom d-flex justify-content-between align-items-center mt-3">
+            <strong id="detailPrice" class="fs-4">Rs. 0</strong>
             <button class="primary-btn" id="detailAddBtn">Add to Cart <i class="bi bi-bag-plus"></i></button>
         </div>
     </div>
@@ -391,16 +382,16 @@
 </div>
 </div>
 
-<div class="toast-container position-fixed bottom-0 end-0 p-3">
-    <div id="appToast" class="toast custom-toast">
-        <div class="toast-body">
-            <i class="bi bi-check-circle-fill"></i>
+<div class="toast-container position-fixed bottom-0 end-0 p-3" style="z-index: 999999;">
+    <div id="appToast" class="toast custom-toast bg-dark text-white border-secondary">
+        <div class="toast-body d-flex align-items-center gap-2">
+            <i class="bi bi-check-circle-fill text-success"></i>
             <span id="toastMessage">Done</span>
         </div>
     </div>
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-<script type="module" src="script.js"></script>
+<script src="script.js"></script>
 </body>
 </html>
