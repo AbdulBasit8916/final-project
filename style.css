@@ -21,7 +21,6 @@ body {
   overflow-x: hidden;
 }
 
-/* App Layout */
 .app-shell {
   display: flex;
   min-height: 100vh;
@@ -107,7 +106,6 @@ body {
   padding: 1.5rem 2rem;
 }
 
-/* Topbar Header */
 .topbar {
   display: flex;
   justify-content: space-between;
@@ -188,7 +186,6 @@ body {
   font-weight: bold;
 }
 
-/* Hero Section */
 .hero-section {
   display: flex;
   justify-content: space-between;
@@ -237,7 +234,6 @@ body {
   cursor: pointer;
 }
 
-/* Category & Food Grids */
 .category-grid, .filter-buttons {
   display: flex;
   gap: 12px;
@@ -280,7 +276,7 @@ body {
   cursor: pointer;
 }
 
-/* HIGH Z-INDEX CART DRAWER (Crucial Fix) */
+/* Sliding Cart Drawer */
 .cart-drawer {
   position: fixed;
   right: -420px;
@@ -353,7 +349,6 @@ body {
   cursor: pointer;
 }
 
-/* Modal Customization */
 .custom-modal {
   background: var(--bg-card);
   color: var(--text-main);
