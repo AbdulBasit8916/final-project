@@ -10,8 +10,8 @@ const foodData = [
 ];
 
 let vendorsData = [
-  { id: 1, name: 'Burger Lab', type: 'Restaurant', category: 'Fast Food', phone: '+92 300 1234567', address: 'Block 4, Clifton', desc: 'Best smash burgers in town.' },
-  { id: 2, name: 'Pizza Max', type: 'Restaurant', category: 'Italian / Fast Food', phone: '+92 321 9876543', address: 'DHA Phase 5', desc: 'Authentic cheesy pizzas.' }
+  { id: 1, name: 'Burger Lab', type: 'Restaurant', category: 'Fast Food', phone: '03001234567', address: 'Block 4, Clifton', desc: 'Best smash burgers in town.' },
+  { id: 2, name: 'Pizza Max', type: 'Restaurant', category: 'Italian / Fast Food', phone: '03219876543', address: 'DHA Phase 5', desc: 'Authentic cheesy pizzas.' }
 ];
 
 // Application State
@@ -23,9 +23,7 @@ let activeFilter = 'All';
 // Global Modals
 let authModal, vendorModal, checkoutModal, foodModal;
 
-// Initialize when DOM is completely loaded
 document.addEventListener('DOMContentLoaded', () => {
-  // Safe Bootstrap Modals Initialization
   const authEl = document.getElementById('authModal');
   const vendorEl = document.getElementById('vendorModal');
   const checkoutEl = document.getElementById('checkoutModal');
@@ -42,7 +40,6 @@ document.addEventListener('DOMContentLoaded', () => {
   setupEventListeners();
 });
 
-// Render Menu Items
 function renderMenu(searchTerm = '') {
   const foodGrid = document.getElementById('foodGrid');
   if (!foodGrid) return;
@@ -80,7 +77,6 @@ function renderMenu(searchTerm = '') {
   });
 }
 
-// Render Vendors
 function renderVendors() {
   const vendorGrid = document.getElementById('vendorGrid');
   if (!vendorGrid) return;
@@ -100,7 +96,6 @@ function renderVendors() {
   });
 }
 
-// Render Orders
 function renderOrders() {
   const ordersContainer = document.getElementById('ordersContainer');
   if (!ordersContainer) return;
@@ -129,7 +124,6 @@ function renderOrders() {
   });
 }
 
-// Cart System Global Methods
 window.addToCart = function(id) {
   const item = foodData.find(f => f.id === id);
   const existing = cart.find(c => c.id === id);
@@ -197,7 +191,6 @@ function updateCartUI() {
   }
 }
 
-// Cart Drawer Open/Close Handler
 function toggleCart() {
   const cartDrawer = document.getElementById('cartDrawer');
   const drawerOverlay = document.getElementById('drawerOverlay');
@@ -208,7 +201,6 @@ function toggleCart() {
   }
 }
 
-// Food Modal View
 window.openFoodDetail = function(id) {
   const item = foodData.find(f => f.id === id);
   document.getElementById('detailIcon').textContent = item.icon;
@@ -226,9 +218,21 @@ window.openFoodDetail = function(id) {
   if (foodModal) foodModal.show();
 };
 
-// All Event Listeners Setup
 function setupEventListeners() {
-  // 1. Cart Button Trigger
+  // 1. Phone Numbers Validation (Limit to 11 digits & Numbers only)
+  const phoneInputs = [document.getElementById('vendorPhone'), document.getElementById('deliveryPhone')];
+  phoneInputs.forEach(input => {
+    if (input) {
+      input.addEventListener('input', (e) => {
+        e.target.value = e.target.value.replace(/[^0-9]/g, '');
+        if (e.target.value.length > 11) {
+          e.target.value = e.target.value.slice(0, 11);
+        }
+      });
+    }
+  });
+
+  // 2. Cart Triggers
   const cartBtn = document.getElementById('cartBtn');
   const closeCart = document.getElementById('closeCart');
   const drawerOverlay = document.getElementById('drawerOverlay');
@@ -242,7 +246,7 @@ function setupEventListeners() {
   if (closeCart) closeCart.onclick = toggleCart;
   if (drawerOverlay) drawerOverlay.onclick = toggleCart;
 
-  // 2. Mobile Navigation
+  // 3. Navigation Controls
   const menuToggle = document.getElementById('menuToggle');
   const sidebarClose = document.getElementById('sidebarClose');
   const mobileOverlay = document.getElementById('mobileOverlay');
@@ -261,13 +265,13 @@ function setupEventListeners() {
     mobileOverlay?.classList.remove('active');
   }
 
-  // 3. Search Bar
+  // 4. Search Bar
   const searchInput = document.getElementById('searchInput');
   if (searchInput) {
     searchInput.oninput = (e) => renderMenu(e.target.value);
   }
 
-  // 4. Category Filters
+  // 5. Category Filter Buttons
   document.querySelectorAll('.filter-btn, .category-card').forEach(btn => {
     btn.onclick = (e) => {
       document.querySelectorAll('.filter-btn, .category-card').forEach(b => b.classList.remove('active'));
@@ -281,7 +285,7 @@ function setupEventListeners() {
     };
   });
 
-  // 5. Auth Modal Actions
+  // 6. Authentication Modal
   const openAuth = () => { if (authModal) authModal.show(); };
   document.getElementById('sideLoginBtn')?.addEventListener('click', openAuth);
   document.getElementById('profileLoginBtn')?.addEventListener('click', openAuth);
@@ -312,7 +316,7 @@ function setupEventListeners() {
     showToast('Logged out successfully.');
   });
 
-  // 6. Vendor Registration
+  // 7. Vendor Submission
   const openVendor = () => { if (vendorModal) vendorModal.show(); };
   document.getElementById('openVendorBtn')?.addEventListener('click', openVendor);
   document.getElementById('openVendorBtn2')?.addEventListener('click', openVendor);
@@ -321,12 +325,18 @@ function setupEventListeners() {
   if (vendorForm) {
     vendorForm.onsubmit = (e) => {
       e.preventDefault();
+      const phoneVal = document.getElementById('vendorPhone').value;
+      if (phoneVal.length !== 11) {
+        showToast('Please enter a valid 11-digit phone number!');
+        return;
+      }
+
       const newVendor = {
         id: Date.now(),
         name: document.getElementById('vendorName').value,
         type: document.getElementById('vendorType').value,
         category: document.getElementById('vendorCategory').value,
-        phone: document.getElementById('vendorPhone').value,
+        phone: phoneVal,
         address: document.getElementById('vendorAddress').value,
         desc: document.getElementById('vendorDescription').value
       };
@@ -338,7 +348,7 @@ function setupEventListeners() {
     };
   }
 
-  // 7. Checkout Flow
+  // 8. Checkout Submission
   document.getElementById('checkoutBtn')?.addEventListener('click', () => {
     toggleCart();
     if (checkoutModal) checkoutModal.show();
@@ -348,6 +358,12 @@ function setupEventListeners() {
   if (checkoutForm) {
     checkoutForm.onsubmit = (e) => {
       e.preventDefault();
+      const phoneVal = document.getElementById('deliveryPhone').value;
+      if (phoneVal.length !== 11) {
+        showToast('Please enter a valid 11-digit phone number!');
+        return;
+      }
+
       const subtotal = cart.reduce((acc, item) => acc + (item.price * item.qty), 0);
       const newOrder = {
         id: Math.floor(1000 + Math.random() * 9000),
