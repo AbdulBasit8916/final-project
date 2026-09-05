@@ -1,209 +1,399 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Food Delivery App</title>
-  
-  <!-- CSS Links -->
-  <link rel="stylesheet" href="style.css">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Food Men - Premium Food Ordering Platform">
+<title>Food Men</title>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-  <div class="app-shell">
-    <!-- Sidebar -->
-    <aside class="sidebar">
-      <div class="brand">
-        <i class="bi bi-fire brand-mark"></i>
-        <span style="font-weight: 700;">FoodieHub</span>
-      </div>
-      
-      <nav class="side-nav">
-        <a href="#" class="nav-link active"><i class="bi bi-house-door"></i> Home</a>
-        <a href="#" class="nav-link"><i class="bi bi-compass"></i> Discover</a>
-        <a href="#" class="nav-link"><i class="bi bi-bag"></i> Orders</a>
-        <a href="#" class="nav-link"><i class="bi bi-heart"></i> Favorites</a>
-      </nav>
+<div class="app-shell">
 
-      <div class="sidebar-bottom">
-        <button class="vendor-btn"><i class="bi bi-shop"></i> Vendor Portal</button>
-        <button class="login-side-btn" data-bs-toggle="modal" data-bs-target="#loginModal">
-          <i class="bi bi-person"></i> Login / Register
+<aside class="sidebar" id="sidebar">
+    <div class="brand">
+        <div class="brand-mark"><i class="bi bi-egg-fried"></i></div>
+        <span>Food <b>Men</b></span>
+    </div>
+
+    <button class="sidebar-close d-lg-none" id="sidebarClose">
+        <i class="bi bi-x-lg"></i>
+    </button>
+
+    <nav class="side-nav">
+        <a href="#home" class="nav-link active"><i class="bi bi-house"></i><span>Home</span></a>
+        <a href="#menu" class="nav-link"><i class="bi bi-grid"></i><span>Menu</span></a>
+        <a href="#vendors" class="nav-link"><i class="bi bi-shop"></i><span>Vendors</span></a>
+        <a href="#orders" class="nav-link"><i class="bi bi-receipt"></i><span>Orders</span></a>
+        <a href="#profile" class="nav-link"><i class="bi bi-person"></i><span>Profile</span></a>
+    </nav>
+
+    <div class="sidebar-bottom">
+        <button class="vendor-btn" id="openVendorBtn">
+            <i class="bi bi-plus-circle"></i>
+            <span>Add Vendor</span>
         </button>
-      </div>
-    </aside>
-
-    <!-- Main Content -->
-    <main class="main-content">
-      <!-- Topbar -->
-      <header class="topbar">
-        <div class="top-search">
-          <i class="bi bi-search"></i>
-          <input type="text" placeholder="Search for food, restaurants...">
-        </div>
-
-        <div class="top-actions">
-          <button class="icon-btn" onclick="toggleCart()">
-            <i class="bi bi-cart3"></i>
-            <span class="cart-count">0</span>
-          </button>
-          
-          <div class="profile-mini" data-bs-toggle="modal" data-bs-target="#loginModal">
-            <div class="avatar">U</div>
-            <span>Account</span>
-          </div>
-        </div>
-      </header>
-
-      <!-- Hero Section -->
-      <section class="hero-section">
-        <div class="hero-content">
-          <span class="hero-badge"><i class="bi bi-stars"></i> Deliciousness delivered</span>
-          <h1>Good food.<br><span>Good mood.</span></h1>
-          <p>Discover your favorite meals, restaurants and local food vendors in one place.</p>
-          <div class="hero-actions">
-            <a href="#menu" class="primary-btn">Explore Menu &rarr;</a>
-            <button class="secondary-btn">View Vendors</button>
-          </div>
-        </div>
-
-        <div class="hero-food">
-          <div class="hero-circle"></div>
-          <div class="hero-img-box">
-            <img src="https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&w=800&q=80" class="hero-img" alt="Delicious Food Bowl">
-          </div>
-          
-          <div class="floating-card card-one">
-            <i class="bi bi-star-fill" style="color: #ffc107;"></i> 4.9 Rating
-          </div>
-          <div class="floating-card card-two">
-            <i class="bi bi-lightning-charge-fill" style="color: #ff5722;"></i> Fast Delivery
-          </div>
-        </div>
-      </section>
-
-      <!-- Food Menu Section -->
-      <section class="section-block" id="menu">
-        <div class="section-heading">
-          <div>
-            <span class="eyebrow">Menu</span>
-            <h2 style="margin: 0; font-weight: 700;">Popular Dishes</h2>
-          </div>
-        </div>
-
-        <div class="food-grid">
-          <!-- Food Card 1 -->
-          <div class="food-card">
-            <div class="food-img-wrap">
-              <img src="https://images.unsplash.com/photo-1568901346375-23c9450c58cd?auto=format&fit=crop&w=500&q=80" class="food-img" alt="Beef Smash Burger">
-            </div>
-            <h5 style="margin-bottom: 5px;">Beef Smash Burger</h5>
-            <span class="badge bg-secondary mb-2">Burgers</span>
-            <div class="d-flex justify-content-between align-items-center mt-2">
-              <strong style="color: var(--text-main);">Rs. 650</strong>
-              <button class="primary-btn" style="padding: 0.4rem 0.8rem; font-size: 0.85rem;" 
-                      onclick="addToCart('Beef Smash Burger', 650, 'https://images.unsplash.com/photo-1568901346375-23c9450c58cd?auto=format&fit=crop&w=500&q=80')">
-                + Add
-              </button>
-            </div>
-          </div>
-
-          <!-- Food Card 2 -->
-          <div class="food-card">
-            <div class="food-img-wrap">
-              <img src="https://images.unsplash.com/photo-1626082927389-6cd097cdc6ec?auto=format&fit=crop&w=500&q=80" class="food-img" alt="Crispy Fried Chicken">
-            </div>
-            <h5 style="margin-bottom: 5px;">Crispy Fried Chicken</h5>
-            <span class="badge bg-secondary mb-2">Fast Food</span>
-            <div class="d-flex justify-content-between align-items-center mt-2">
-              <strong style="color: var(--text-main);">Rs. 850</strong>
-              <button class="primary-btn" style="padding: 0.4rem 0.8rem; font-size: 0.85rem;" 
-                      onclick="addToCart('Crispy Fried Chicken', 850, 'https://images.unsplash.com/photo-1626082927389-6cd097cdc6ec?auto=format&fit=crop&w=500&q=80')">
-                + Add
-              </button>
-            </div>
-          </div>
-
-          <!-- Food Card 3 -->
-          <div class="food-card">
-            <div class="food-img-wrap">
-              <img src="https://images.unsplash.com/photo-1606313564200-e75d5e30476c?auto=format&fit=crop&w=500&q=80" class="food-img" alt="Chocolate Lava Cake">
-            </div>
-            <h5 style="margin-bottom: 5px;">Chocolate Lava Cake</h5>
-            <span class="badge bg-secondary mb-2">Desserts</span>
-            <div class="d-flex justify-content-between align-items-center mt-2">
-              <strong style="color: var(--text-main);">Rs. 450</strong>
-              <button class="primary-btn" style="padding: 0.4rem 0.8rem; font-size: 0.85rem;" 
-                      onclick="addToCart('Chocolate Lava Cake', 450, 'https://images.unsplash.com/photo-1606313564200-e75d5e30476c?auto=format&fit=crop&w=500&q=80')">
-                + Add
-              </button>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <!-- Footer -->
-      <footer>
-        <div class="footer-brand">
-          <i class="bi bi-fire" style="color: var(--primary);"></i>
-          <span>FoodieHub &copy; 2026</span>
-        </div>
-        <div>All rights reserved.</div>
-      </footer>
-    </main>
-  </div>
-
-  <!-- Cart Drawer Overlay & Side Panel -->
-  <div class="drawer-overlay"></div>
-  <div class="cart-drawer">
-    <div class="d-flex justify-content-between align-items-center pb-3 border-bottom">
-      <h5 style="margin: 0;">Your Cart</h5>
-      <button class="close-btn" onclick="toggleCart()">&times;</button>
+        <button class="login-side-btn" id="sideLoginBtn">
+            <i class="bi bi-box-arrow-in-right"></i>
+            <span>Login</span>
+        </button>
     </div>
-    
-    <div class="cart-items">
-      <!-- Cart items JavaScript se dynamic add honge -->
+</aside>
+
+<div class="mobile-overlay" id="mobileOverlay"></div>
+
+<main class="main-content">
+
+<header class="topbar">
+    <button class="menu-toggle d-lg-none" id="menuToggle">
+        <i class="bi bi-list"></i>
+    </button>
+
+    <div class="top-search">
+        <i class="bi bi-search"></i>
+        <input type="text" id="searchInput" placeholder="Search food, vendors...">
     </div>
 
-    <div class="pt-3 border-top">
-      <button class="primary-btn" style="width: 100%; justify-content: center;">Checkout</button>
+    <div class="top-actions">
+        <button class="icon-btn" id="cartBtn">
+            <i class="bi bi-bag"></i>
+            <span class="cart-count" id="cartCount">0</span>
+        </button>
+
+        <button class="profile-mini" id="profileBtn">
+            <span class="avatar" id="topAvatar">G</span>
+            <span class="d-none d-md-block" id="topUserName">Guest</span>
+            <i class="bi bi-chevron-down d-none d-md-block"></i>
+        </button>
     </div>
-  </div>
+</header>
 
-  <!-- Login Modal -->
-  <div class="modal fade" id="loginModal" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-      <div class="modal-content custom-modal p-3">
-        <div class="modal-header border-0">
-          <h5 class="modal-title font-weight-bold">Login to FoodieHub</h5>
-          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+<section class="hero-section" id="home">
+    <div class="hero-content">
+        <span class="hero-badge"><i class="bi bi-stars"></i> Deliciousness delivered</span>
+        <h1>Good food.<br><span>Good mood.</span></h1>
+        <p>Discover your favorite meals, restaurants and local food vendors in one place.</p>
+        <div class="hero-actions">
+            <a href="#menu" class="primary-btn">Explore Menu <i class="bi bi-arrow-right"></i></a>
+            <a href="#vendors" class="secondary-btn">View Vendors</a>
         </div>
-        <div class="modal-body">
-          <form id="loginForm">
-            <div class="mb-3">
-              <label class="form-label" style="font-size: 0.9rem;">Email Address</label>
-              <input type="email" id="email" class="form-control" placeholder="name@gmail.com" required>
-            </div>
-            <div class="mb-3">
-              <label class="form-label" style="font-size: 0.9rem;">Password</label>
-              <input type="password" id="password" class="form-control" placeholder="••••••••" required>
-            </div>
-
-            <!-- Error Container for Invalid Credentials / Email Format -->
-            <div id="login-error" style="color: #ff5722; font-size: 0.85rem; margin-top: -5px; margin-bottom: 12px; display: none; font-weight: 600;"></div>
-
-            <button type="submit" class="primary-btn w-100 justify-content-center">Login</button>
-          </form>
-        </div>
-      </div>
     </div>
-  </div>
 
-  <!-- Bootstrap JS (Modal functional karne ke liye) -->
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-  <!-- Custom JS File -->
-  <script src="script.js"></script>
+    <div class="hero-food">
+        <div class="hero-circle"></div>
+        <div class="hero-img-box">
+            <img src="https://images.unsplash.com/photo-1547592166-23ac45744acd?auto=format&fit=crop&w=800&q=80" alt="Hot Bowl of Soup" class="hero-img">
+        </div>
+        <div class="floating-card card-one"><i class="bi bi-star-fill text-warning"></i> 4.9 Rating</div>
+        <div class="floating-card card-two"><i class="bi bi-lightning-fill text-warning"></i> Fast Delivery</div>
+    </div>
+</section>
+
+<section class="section-block">
+    <div class="section-heading">
+        <div>
+            <span class="eyebrow">Explore</span>
+            <h2>Food Categories</h2>
+        </div>
+    </div>
+
+    <div class="category-grid" id="categoryGrid">
+        <button class="category-card active" data-category="All">
+            <span>🍽️</span><strong>All</strong>
+        </button>
+        <button class="category-card" data-category="Burgers">
+            <span>🍔</span><strong>Burgers</strong>
+        </button>
+        <button class="category-card" data-category="Pizza">
+            <span>🍕</span><strong>Pizza</strong>
+        </button>
+        <button class="category-card" data-category="Chicken">
+            <span>🍗</span><strong>Chicken</strong>
+        </button>
+        <button class="category-card" data-category="Desserts">
+            <span>🍰</span><strong>Desserts</strong>
+        </button>
+        <button class="category-card" data-category="Drinks">
+            <span>🥤</span><strong>Drinks</strong>
+        </button>
+    </div>
+</section>
+
+<section class="section-block" id="menu">
+    <div class="section-heading">
+        <div>
+            <span class="eyebrow">Our Menu</span>
+            <h2>Popular Food</h2>
+        </div>
+        <div class="filter-buttons">
+            <button class="filter-btn active" data-filter="All">All</button>
+            <button class="filter-btn" data-filter="Burgers">Burgers</button>
+            <button class="filter-btn" data-filter="Pizza">Pizza</button>
+            <button class="filter-btn" data-filter="Chicken">Chicken</button>
+            <button class="filter-btn" data-filter="Desserts">Desserts</button>
+        </div>
+    </div>
+
+    <div class="food-grid" id="foodGrid"></div>
+</section>
+
+<section class="section-block" id="vendors">
+    <div class="section-heading">
+        <div>
+            <span class="eyebrow">Discover</span>
+            <h2>Our Vendors</h2>
+        </div>
+        <button class="outline-btn" id="openVendorBtn2">Add Vendor <i class="bi bi-plus"></i></button>
+    </div>
+
+    <div class="vendor-grid" id="vendorGrid"></div>
+</section>
+
+<section class="section-block orders-section" id="orders">
+    <div class="section-heading">
+        <div>
+            <span class="eyebrow">Your Activity</span>
+            <h2>Recent Orders</h2>
+        </div>
+    </div>
+
+    <div id="ordersContainer" class="orders-container"></div>
+</section>
+
+<section class="section-block profile-section" id="profile">
+    <div class="profile-card">
+        <div class="profile-avatar" id="profileAvatar">G</div>
+        <div class="profile-info">
+            <span class="eyebrow">My Account</span>
+            <h2 id="profileName">Guest User</h2>
+            <p id="profileEmail">Login to manage your account</p>
+        </div>
+        <div class="profile-actions">
+            <button class="primary-btn small" id="profileLoginBtn">Login / Signup</button>
+            <button class="danger-btn small d-none" id="logoutBtn">Logout</button>
+        </div>
+    </div>
+</section>
+
+<footer>
+    <div class="footer-brand">
+        <div class="brand-mark"><i class="bi bi-egg-fried"></i></div>
+        <strong>Food Men</strong>
+    </div>
+    <p>© 2026 Food Men. Delicious food, delivered with care.</p>
+</footer>
+
+</main>
+</div>
+
+<div class="cart-drawer" id="cartDrawer">
+    <div class="cart-header d-flex justify-content-between align-items-center">
+        <div>
+            <span class="eyebrow">Your Order</span>
+            <h3>Shopping Cart</h3>
+        </div>
+        <button class="close-btn" id="closeCart"><i class="bi bi-x-lg"></i></button>
+    </div>
+
+    <div class="cart-items" id="cartItems"></div>
+
+    <div class="cart-empty" id="cartEmpty">
+        <i class="bi bi-bag-x fs-1"></i>
+        <h4>Your cart is empty</h4>
+        <p>Add something delicious from the menu.</p>
+    </div>
+
+    <div class="cart-footer d-none" id="cartFooter">
+        <div class="price-row d-flex justify-content-between my-1"><span>Subtotal</span><strong id="cartSubtotal">Rs. 0</strong></div>
+        <div class="price-row d-flex justify-content-between my-1"><span>Delivery</span><strong id="deliveryFee">Rs. 150</strong></div>
+        <div class="price-row total d-flex justify-content-between my-2 border-top pt-2"><span>Total</span><strong id="cartTotal">Rs. 0</strong></div>
+        <button class="primary-btn w-100 justify-content-center mt-3" id="checkoutBtn">Proceed to Checkout <i class="bi bi-arrow-right"></i></button>
+    </div>
+</div>
+
+<div class="drawer-overlay" id="drawerOverlay"></div>
+
+<div class="modal fade" id="authModal" tabindex="-1">
+<div class="modal-dialog modal-dialog-centered">
+<div class="modal-content custom-modal">
+    <div class="modal-header">
+        <div>
+            <span class="eyebrow" id="authEyebrow">Welcome</span>
+            <h3 id="authTitle">Login to Food Men</h3>
+        </div>
+        <button class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+    </div>
+
+    <div class="modal-body">
+        <div id="authForm">
+            <div class="form-group signup-only d-none mb-3">
+                <label>Full Name</label>
+                <input type="text" id="authName" class="form-control" placeholder="Your name">
+            </div>
+
+            <div class="form-group mb-3">
+                <label>Email Address</label>
+                <input type="email" id="authEmail" class="form-control" placeholder="you@example.com">
+            </div>
+
+            <div class="form-group mb-3">
+                <label>Password</label>
+                <div class="password-wrap">
+                    <input type="password" id="authPassword" class="form-control" placeholder="Enter password">
+                </div>
+            </div>
+
+            <button class="primary-btn w-100 justify-content-center mt-2" id="authSubmitBtn">Login</button>
+
+            <p class="auth-switch text-center mt-3" id="authSwitchText">
+                Don't have an account? 
+                <button class="btn btn-link p-0 text-decoration-none" id="switchAuth">Create account</button>
+            </p>
+        </div>
+    </div>
+</div>
+</div>
+</div>
+
+<div class="modal fade" id="vendorModal" tabindex="-1">
+<div class="modal-dialog modal-lg modal-dialog-centered">
+<div class="modal-content custom-modal">
+    <div class="modal-header">
+        <div>
+            <span class="eyebrow">Grow With Us</span>
+            <h3>Add Your Vendor</h3>
+        </div>
+        <button class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+    </div>
+
+    <div class="modal-body">
+        <form id="vendorForm">
+            <div class="row g-3">
+                <div class="col-md-6">
+                    <label>Vendor Name</label>
+                    <input id="vendorName" class="form-control" required placeholder="e.g. Food House">
+                </div>
+
+                <div class="col-md-6">
+                    <label>Vendor Type</label>
+                    <select id="vendorType" class="form-select" required>
+                        <option value="">Select type</option>
+                        <option>Restaurant</option>
+                        <option>Home Chef</option>
+                        <option>Packaged Food</option>
+                        <option>Hotel</option>
+                        <option>Hotel Ballroom / Event Venue</option>
+                        <option>Bakery</option>
+                        <option>Café</option>
+                        <option>Catering Service</option>
+                    </select>
+                </div>
+
+                <div class="col-md-6">
+                    <label>Food Category</label>
+                    <input id="vendorCategory" class="form-control" placeholder="e.g. Pakistani, Fast Food">
+                </div>
+
+                <div class="col-md-6">
+                    <label>Phone Number (11 Digits)</label>
+                    <input id="vendorPhone" type="tel" maxlength="11" class="form-control" required placeholder="03000000000">
+                </div>
+
+                <div class="col-12">
+                    <label>Address</label>
+                    <input id="vendorAddress" class="form-control" placeholder="Vendor address">
+                </div>
+
+                <div class="col-12">
+                    <label>Description</label>
+                    <textarea id="vendorDescription" class="form-control" rows="3" placeholder="Tell customers about your vendor"></textarea>
+                </div>
+            </div>
+
+            <button class="primary-btn w-100 justify-content-center mt-4" type="submit">
+                Add Vendor <i class="bi bi-check2"></i>
+            </button>
+        </form>
+    </div>
+</div>
+</div>
+</div>
+
+<div class="modal fade" id="checkoutModal" tabindex="-1">
+<div class="modal-dialog modal-dialog-centered">
+<div class="modal-content custom-modal">
+    <div class="modal-header">
+        <div>
+            <span class="eyebrow">Almost Done</span>
+            <h3>Checkout</h3>
+        </div>
+        <button class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+    </div>
+
+    <div class="modal-body">
+        <form id="checkoutForm">
+            <div class="form-group mb-3">
+                <label>Delivery Address</label>
+                <textarea id="deliveryAddress" class="form-control" required placeholder="Enter complete delivery address"></textarea>
+            </div>
+
+            <div class="form-group mb-3">
+                <label>Phone Number (11 Digits)</label>
+                <input id="deliveryPhone" type="tel" maxlength="11" class="form-control" required placeholder="03000000000">
+            </div>
+
+            <div class="form-group mb-3">
+                <label>Payment Method</label>
+                <select id="paymentMethod" class="form-select">
+                    <option>Cash on Delivery</option>
+                    <option>Card Payment</option>
+                </select>
+            </div>
+
+            <div class="checkout-summary d-flex justify-content-between my-3 p-2 bg-dark rounded">
+                <span>Total Payable</span>
+                <strong id="checkoutTotal">Rs. 0</strong>
+            </div>
+
+            <button class="primary-btn w-100 justify-content-center" type="submit">
+                Place Order <i class="bi bi-check-circle"></i>
+            </button>
+        </form>
+    </div>
+</div>
+</div>
+</div>
+
+<div class="modal fade" id="foodModal" tabindex="-1">
+<div class="modal-dialog modal-dialog-centered">
+<div class="modal-content custom-modal p-3">
+    <div class="food-detail text-center">
+        <div class="food-detail-icon display-1" id="detailIcon">🍔</div>
+        <span class="eyebrow" id="detailCategory">Food</span>
+        <h3 id="detailName">Food Name</h3>
+        <p id="detailDescription" class="text-muted"></p>
+        <div class="detail-bottom d-flex justify-content-between align-items-center mt-3">
+            <strong id="detailPrice" class="fs-4">Rs. 0</strong>
+            <button class="primary-btn" id="detailAddBtn">Add to Cart <i class="bi bi-bag-plus"></i></button>
+        </div>
+    </div>
+</div>
+</div>
+</div>
+
+<div class="toast-container position-fixed bottom-0 end-0 p-3" style="z-index: 999999;">
+    <div id="appToast" class="toast custom-toast bg-dark text-white border-secondary">
+        <div class="toast-body d-flex align-items-center gap-2">
+            <i class="bi bi-check-circle-fill text-success"></i>
+            <span id="toastMessage">Done</span>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="script.js"></script>
 </body>
 </html>
