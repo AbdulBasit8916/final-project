@@ -1,17 +1,17 @@
-// Data Models
+// Data Models with Real Image URLs
 const foodData = [
-  { id: 1, name: 'Zinger Burger', category: 'Burgers', price: 550, icon: '🍔', desc: 'Crispy fried chicken thigh patty with mayo and lettuce.' },
-  { id: 2, name: 'Beef Smash Burger', category: 'Burgers', price: 750, icon: '🍔', desc: 'Double beef patty with melted cheddar and special sauce.' },
-  { id: 3, name: 'Chicken Tikka Pizza', category: 'Pizza', price: 1200, icon: '🍕', desc: 'Topped with spicy tikka chicken, onions, and mozzarella.' },
-  { id: 4, name: 'Pepperoni Delight', category: 'Pizza', price: 1400, icon: '🍕', desc: 'Classic pepperoni with rich tomato sauce and extra cheese.' },
-  { id: 5, name: 'Crispy Fried Chicken', category: 'Chicken', price: 850, icon: '🍗', desc: '4 pieces of hot & spicy golden fried chicken.' },
-  { id: 6, name: 'Chocolate Lava Cake', category: 'Desserts', price: 450, icon: '🍰', desc: 'Warm chocolate cake with a molten chocolate center.' },
-  { id: 7, name: 'Cold Coffee', category: 'Drinks', price: 350, icon: '🥤', desc: 'Chilled espresso blended with milk and ice cream.' }
+  { id: 1, name: 'Zinger Burger', category: 'Burgers', price: 550, image: 'https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=500&q=80', desc: 'Crispy fried chicken thigh patty with mayo and lettuce.' },
+  { id: 2, name: 'Beef Smash Burger', category: 'Burgers', price: 750, image: 'https://images.unsplash.com/photo-1586190848861-99aa4a171e90?w=500&q=80', desc: 'Double beef patty with melted cheddar and special sauce.' },
+  { id: 3, name: 'Chicken Tikka Pizza', category: 'Pizza', price: 1200, image: 'https://images.unsplash.com/photo-1513104890138-7c749659a591?w=500&q=80', desc: 'Topped with spicy tikka chicken, onions, and mozzarella.' },
+  { id: 4, name: 'Pepperoni Delight', category: 'Pizza', price: 1400, image: 'https://images.unsplash.com/photo-1628840042765-356cda07504e?w=500&q=80', desc: 'Classic pepperoni with rich tomato sauce and extra cheese.' },
+  { id: 5, name: 'Crispy Fried Chicken', category: 'Chicken', price: 850, image: 'https://images.unsplash.com/photo-1626645738196-c2a7c87a8f58?w=500&q=80', desc: '4 pieces of hot & spicy golden fried chicken.' },
+  { id: 6, name: 'Chocolate Lava Cake', category: 'Desserts', price: 450, image: 'https://images.unsplash.com/photo-1606313564200-e75d5e30476c?w=500&q=80', desc: 'Warm chocolate cake with a molten chocolate center.' },
+  { id: 7, name: 'Cold Coffee', category: 'Drinks', price: 350, image: 'https://images.unsplash.com/photo-1517701604599-bb29b565090c?w=500&q=80', desc: 'Chilled espresso blended with milk and ice cream.' }
 ];
 
 let vendorsData = [
-  { id: 1, name: 'Burger Lab', type: 'Restaurant', category: 'Fast Food', phone: '+92 300 1234567', address: 'Block 4, Clifton', desc: 'Best smash burgers in town.' },
-  { id: 2, name: 'Pizza Max', type: 'Restaurant', category: 'Italian / Fast Food', phone: '+92 321 9876543', address: 'DHA Phase 5', desc: 'Authentic cheesy pizzas.' }
+  { id: 1, name: 'Burger Lab', type: 'Restaurant', category: 'Fast Food', phone: '03001234567', address: 'Block 4, Clifton', desc: 'Best smash burgers in town.' },
+  { id: 2, name: 'Pizza Max', type: 'Restaurant', category: 'Italian / Fast Food', phone: '03219876543', address: 'DHA Phase 5', desc: 'Authentic cheesy pizzas.' }
 ];
 
 // Application State
@@ -23,9 +23,7 @@ let activeFilter = 'All';
 // Global Modals
 let authModal, vendorModal, checkoutModal, foodModal;
 
-// Initialize when DOM is completely loaded
 document.addEventListener('DOMContentLoaded', () => {
-  // Safe Bootstrap Modals Initialization
   const authEl = document.getElementById('authModal');
   const vendorEl = document.getElementById('vendorModal');
   const checkoutEl = document.getElementById('checkoutModal');
@@ -42,7 +40,6 @@ document.addEventListener('DOMContentLoaded', () => {
   setupEventListeners();
 });
 
-// Render Menu Items
 function renderMenu(searchTerm = '') {
   const foodGrid = document.getElementById('foodGrid');
   if (!foodGrid) return;
@@ -64,8 +61,10 @@ function renderMenu(searchTerm = '') {
     const card = document.createElement('div');
     card.className = 'food-card';
     card.innerHTML = `
-      <div class="food-icon" onclick="openFoodDetail(${item.id})">${item.icon}</div>
-      <div class="food-info">
+      <div class="food-img-wrap" onclick="openFoodDetail(${item.id})">
+        <img src="${item.image}" alt="${item.name}" class="food-img">
+      </div>
+      <div class="food-info mt-2">
         <h5>${item.name}</h5>
         <span class="badge bg-light text-dark mb-2">${item.category}</span>
         <div class="d-flex justify-content-between align-items-center mt-2">
@@ -80,7 +79,6 @@ function renderMenu(searchTerm = '') {
   });
 }
 
-// Render Vendors
 function renderVendors() {
   const vendorGrid = document.getElementById('vendorGrid');
   if (!vendorGrid) return;
@@ -100,7 +98,6 @@ function renderVendors() {
   });
 }
 
-// Render Orders
 function renderOrders() {
   const ordersContainer = document.getElementById('ordersContainer');
   if (!ordersContainer) return;
@@ -129,7 +126,6 @@ function renderOrders() {
   });
 }
 
-// Cart System Global Methods
 window.addToCart = function(id) {
   const item = foodData.find(f => f.id === id);
   const existing = cart.find(c => c.id === id);
@@ -182,7 +178,8 @@ function updateCartUI() {
     if (cartItems) {
       cartItems.innerHTML = cart.map(item => `
         <div class="cart-item">
-          <div>
+          <img src="${item.image}" alt="${item.name}" class="cart-item-img">
+          <div class="flex-grow-1 ms-2">
             <h6 class="mb-0">${item.name}</h6>
             <small class="text-muted">Rs. ${item.price} x ${item.qty}</small>
           </div>
@@ -197,7 +194,6 @@ function updateCartUI() {
   }
 }
 
-// Cart Drawer Open/Close Handler
 function toggleCart() {
   const cartDrawer = document.getElementById('cartDrawer');
   const drawerOverlay = document.getElementById('drawerOverlay');
@@ -208,10 +204,14 @@ function toggleCart() {
   }
 }
 
-// Food Modal View
 window.openFoodDetail = function(id) {
   const item = foodData.find(f => f.id === id);
-  document.getElementById('detailIcon').textContent = item.icon;
+  const detailIcon = document.getElementById('detailIcon');
+  
+  if (detailIcon) {
+    detailIcon.innerHTML = `<img src="${item.image}" alt="${item.name}" class="img-fluid rounded mb-3" style="max-height: 200px; object-fit: cover; width: 100%;">`;
+  }
+
   document.getElementById('detailCategory').textContent = item.category;
   document.getElementById('detailName').textContent = item.name;
   document.getElementById('detailDescription').textContent = item.desc;
@@ -226,9 +226,21 @@ window.openFoodDetail = function(id) {
   if (foodModal) foodModal.show();
 };
 
-// All Event Listeners Setup
 function setupEventListeners() {
-  // 1. Cart Button Trigger
+  // 1. Phone Numbers Validation
+  const phoneInputs = [document.getElementById('vendorPhone'), document.getElementById('deliveryPhone')];
+  phoneInputs.forEach(input => {
+    if (input) {
+      input.addEventListener('input', (e) => {
+        e.target.value = e.target.value.replace(/[^0-9]/g, '');
+        if (e.target.value.length > 11) {
+          e.target.value = e.target.value.slice(0, 11);
+        }
+      });
+    }
+  });
+
+  // 2. Cart Triggers
   const cartBtn = document.getElementById('cartBtn');
   const closeCart = document.getElementById('closeCart');
   const drawerOverlay = document.getElementById('drawerOverlay');
@@ -242,7 +254,7 @@ function setupEventListeners() {
   if (closeCart) closeCart.onclick = toggleCart;
   if (drawerOverlay) drawerOverlay.onclick = toggleCart;
 
-  // 2. Mobile Navigation
+  // 3. Navigation Controls
   const menuToggle = document.getElementById('menuToggle');
   const sidebarClose = document.getElementById('sidebarClose');
   const mobileOverlay = document.getElementById('mobileOverlay');
@@ -261,13 +273,13 @@ function setupEventListeners() {
     mobileOverlay?.classList.remove('active');
   }
 
-  // 3. Search Bar
+  // 4. Search Bar
   const searchInput = document.getElementById('searchInput');
   if (searchInput) {
     searchInput.oninput = (e) => renderMenu(e.target.value);
   }
 
-  // 4. Category Filters
+  // 5. Category Filter Buttons
   document.querySelectorAll('.filter-btn, .category-card').forEach(btn => {
     btn.onclick = (e) => {
       document.querySelectorAll('.filter-btn, .category-card').forEach(b => b.classList.remove('active'));
@@ -281,7 +293,7 @@ function setupEventListeners() {
     };
   });
 
-  // 5. Auth Modal Actions
+  // 6. Authentication Modal
   const openAuth = () => { if (authModal) authModal.show(); };
   document.getElementById('sideLoginBtn')?.addEventListener('click', openAuth);
   document.getElementById('profileLoginBtn')?.addEventListener('click', openAuth);
@@ -312,7 +324,7 @@ function setupEventListeners() {
     showToast('Logged out successfully.');
   });
 
-  // 6. Vendor Registration
+  // 7. Vendor Submission
   const openVendor = () => { if (vendorModal) vendorModal.show(); };
   document.getElementById('openVendorBtn')?.addEventListener('click', openVendor);
   document.getElementById('openVendorBtn2')?.addEventListener('click', openVendor);
@@ -321,12 +333,18 @@ function setupEventListeners() {
   if (vendorForm) {
     vendorForm.onsubmit = (e) => {
       e.preventDefault();
+      const phoneVal = document.getElementById('vendorPhone').value;
+      if (phoneVal.length !== 11) {
+        showToast('Please enter a valid 11-digit phone number!');
+        return;
+      }
+
       const newVendor = {
         id: Date.now(),
         name: document.getElementById('vendorName').value,
         type: document.getElementById('vendorType').value,
         category: document.getElementById('vendorCategory').value,
-        phone: document.getElementById('vendorPhone').value,
+        phone: phoneVal,
         address: document.getElementById('vendorAddress').value,
         desc: document.getElementById('vendorDescription').value
       };
@@ -338,7 +356,7 @@ function setupEventListeners() {
     };
   }
 
-  // 7. Checkout Flow
+  // 8. Checkout Submission
   document.getElementById('checkoutBtn')?.addEventListener('click', () => {
     toggleCart();
     if (checkoutModal) checkoutModal.show();
@@ -348,6 +366,12 @@ function setupEventListeners() {
   if (checkoutForm) {
     checkoutForm.onsubmit = (e) => {
       e.preventDefault();
+      const phoneVal = document.getElementById('deliveryPhone').value;
+      if (phoneVal.length !== 11) {
+        showToast('Please enter a valid 11-digit phone number!');
+        return;
+      }
+
       const subtotal = cart.reduce((acc, item) => acc + (item.price * item.qty), 0);
       const newOrder = {
         id: Math.floor(1000 + Math.random() * 9000),
