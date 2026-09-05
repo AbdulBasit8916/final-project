@@ -190,7 +190,7 @@ body {
   font-weight: bold;
 }
 
-/* Hero Section with Image & Hover Effects */
+/* Hero Section with Centered Image & Glow */
 .hero-section {
   display: flex;
   justify-content: space-between;
@@ -244,6 +244,7 @@ body {
   justify-content: center;
   align-items: center;
   min-width: 300px;
+  margin: 0 auto;
 }
 
 .hero-circle {
@@ -253,6 +254,9 @@ body {
   background: radial-gradient(circle, rgba(255,87,34,0.3) 0%, rgba(0,0,0,0) 70%);
   border-radius: 50%;
   z-index: 1;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
 }
 
 .hero-img-box {
@@ -265,16 +269,21 @@ body {
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
   border: 2px solid var(--border-color);
   transition: transform 0.4s ease, box-shadow 0.4s ease, border-color 0.4s ease;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .hero-img {
   width: 100%;
   height: 100%;
   object-fit: cover;
+  object-position: center;
+  display: block;
   transition: transform 0.5s ease;
 }
 
-/* Hero Image Hover Animation */
+/* Image Hover Effects */
 .hero-img-box:hover {
   transform: translateY(-8px) scale(1.02);
   box-shadow: 0 20px 40px rgba(255, 87, 34, 0.3);
