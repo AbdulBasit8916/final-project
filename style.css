@@ -190,18 +190,19 @@ body {
   font-weight: bold;
 }
 
-/* Hero Section with Centered Image & Glow */
+/* Hero Section Layout Balance */
 .hero-section {
   display: flex;
   justify-content: space-between;
   align-items: center;
   background: var(--bg-card);
-  border-radius: 16px;
-  padding: 3rem;
+  border-radius: 20px;
+  padding: 3.5rem 3rem;
   margin-bottom: 3rem;
-  gap: 2rem;
+  gap: 2.5rem;
   position: relative;
   overflow: hidden;
+  border: 1px solid var(--border-color);
 }
 
 .hero-badge {
@@ -238,40 +239,37 @@ body {
   margin-top: 1.5rem;
 }
 
+/* Hero Food Container Center Alignment */
 .hero-food {
   position: relative;
   display: flex;
   justify-content: center;
   align-items: center;
-  min-width: 300px;
-  margin: 0 auto;
+  min-width: 320px;
+  height: 320px;
+  flex-shrink: 0;
 }
 
 .hero-circle {
   position: absolute;
-  width: 260px;
-  height: 260px;
-  background: radial-gradient(circle, rgba(255,87,34,0.3) 0%, rgba(0,0,0,0) 70%);
-  border-radius: 50%;
-  z-index: 1;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-}
-
-.hero-img-box {
   width: 280px;
   height: 280px;
-  border-radius: 20px;
+  background: radial-gradient(circle, rgba(255, 87, 34, 0.25) 0%, rgba(0, 0, 0, 0) 70%);
+  border-radius: 50%;
+  z-index: 1;
+}
+
+/* Perfect Square Center Crop Box */
+.hero-img-box {
+  width: 260px;
+  height: 260px;
+  border-radius: 24px;
   overflow: hidden;
   position: relative;
   z-index: 2;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
-  border: 2px solid var(--border-color);
-  transition: transform 0.4s ease, box-shadow 0.4s ease, border-color 0.4s ease;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  box-shadow: 0 12px 35px rgba(0, 0, 0, 0.6);
+  border: 2px solid rgba(255, 255, 255, 0.08);
+  transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.4s ease, border-color 0.4s ease;
 }
 
 .hero-img {
@@ -283,45 +281,45 @@ body {
   transition: transform 0.5s ease;
 }
 
-/* Image Hover Effects */
+/* Smooth Hover Animation */
 .hero-img-box:hover {
-  transform: translateY(-8px) scale(1.02);
-  box-shadow: 0 20px 40px rgba(255, 87, 34, 0.3);
+  transform: translateY(-6px) scale(1.03);
+  box-shadow: 0 20px 45px rgba(255, 87, 34, 0.35);
   border-color: var(--primary);
 }
 
 .hero-img-box:hover .hero-img {
-  transform: scale(1.1) rotate(1deg);
+  transform: scale(1.08);
 }
 
+/* Floating Badges Alignment */
 .floating-card {
   position: absolute;
-  background: rgba(30, 30, 30, 0.85);
-  backdrop-filter: blur(8px);
+  background: rgba(26, 26, 26, 0.9);
+  backdrop-filter: blur(12px);
   border: 1px solid var(--border-color);
-  padding: 0.6rem 1rem;
+  padding: 0.5rem 0.9rem;
   border-radius: 30px;
-  font-size: 0.85rem;
+  font-size: 0.8rem;
   font-weight: 600;
   color: var(--text-main);
   z-index: 3;
-  box-shadow: 0 4px 15px rgba(0,0,0,0.3);
-  transition: transform 0.3s ease, background 0.3s ease, border-color 0.3s ease;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.4);
+  transition: transform 0.3s ease, border-color 0.3s ease;
 }
 
 .card-one {
-  top: 10px;
-  right: -10px;
+  top: 15px;
+  right: -5px;
 }
 
 .card-two {
-  bottom: 10px;
-  left: -10px;
+  bottom: 15px;
+  left: -5px;
 }
 
 .floating-card:hover {
-  transform: translateY(-4px) scale(1.05);
-  background: var(--bg-card);
+  transform: translateY(-3px);
   border-color: var(--primary);
 }
 
