@@ -1,32 +1,31 @@
-// Sample Data (Images included)
+// Food Items Data
 const foods = [
-  { id: 1, name: "Cheeseburger", category: "burgers", price: 8.99, img: "https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=400" },
-  { id: 2, name: "Pepperoni Pizza", category: "pizza", price: 12.99, img: "https://images.unsplash.com/photo-1513104890138-7c749659a591?w=400" },
-  { id: 3, name: "Crispy Fried Chicken", category: "chicken", price: 9.99, img: "https://images.unsplash.com/photo-1626645738196-c2a7c87a8f58?w=400" },
-  { id: 4, name: "Chocolate Cake", category: "desserts", price: 4.99, img: "https://images.unsplash.com/photo-1578985545062-69928b1d9587?w=400" },
-  { id: 5, name: "Iced Cola", category: "drinks", price: 2.50, img: "https://images.unsplash.com/photo-1622483767028-3f66f32aef97?w=400" }
+  { id: 1, name: "Zinger Burger", category: "burgers", price: "$5.99", img: "https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=400" },
+  { id: 2, name: "Cheese Pizza", category: "pizza", price: "$9.99", img: "https://images.unsplash.com/photo-1513104890138-7c749659a591?w=400" },
+  { id: 3, name: "Fried Chicken", category: "chicken", price: "$7.50", img: "https://images.unsplash.com/photo-1626645738196-c2a7c87a8f58?w=400" },
+  { id: 4, name: "Chocolate Cake", category: "desserts", price: "$4.00", img: "https://images.unsplash.com/photo-1578985545062-69928b1d9587?w=400" },
+  { id: 5, name: "Cold Drink", category: "drinks", price: "$1.50", img: "https://images.unsplash.com/photo-1622483767028-3f66f32aef97?w=400" }
 ];
 
+// Vendor Data
 const vendors = [
-  { id: 1, name: "Burger King", desc: "Fast Food • 20 mins", img: "https://images.unsplash.com/photo-1550547660-d9450f859349?w=400" },
-  { id: 2, name: "Pizza Hut", desc: "Italian • 30 mins", img: "https://images.unsplash.com/photo-1590947132387-155cc02f3212?w=400" },
-  { id: 3, name: "KFC", desc: "Chicken • 15 mins", img: "https://images.unsplash.com/photo-1513639776629-7b61b0ac49cb?w=400" }
+  { id: 1, name: "KFC Fast Food", desc: "Fast Food • 15 min", img: "https://images.unsplash.com/photo-1550547660-d9450f859349?w=400" },
+  { id: 2, name: "Pizza Max", desc: "Italian • 25 min", img: "https://images.unsplash.com/photo-1590947132387-155cc02f3212?w=400" }
 ];
 
-let cart = [];
+let cartCount = 0;
 
-// Render Food Items
+// Render Food Cards
 function renderFoods(items) {
-  const grid = document.getElementById("foodGrid");
-  grid.innerHTML = items.map(food => `
+  const container = document.getElementById("foodGrid");
+  container.innerHTML = items.map(food => `
     <div class="card">
       <img src="${food.img}" alt="${food.name}">
-      <div class="card-info">
-        <h4>${food.name}</h4>
-        <p>Delicious & Fresh</p>
-        <div class="card-footer">
-          <span class="price">$${food.price.toFixed(2)}</span>
-          <button class="btn btn-primary btn-sm" onclick="addToCart(${food.id})">Add</button>
+      <div class="card-body">
+        <div class="card-title">${food.name}</div>
+        <div class="card-action">
+          <span class="card-price">${food.price}</span>
+          <button class="add-btn" onclick="addToCart('${food.name}')">Add +</button>
         </div>
       </div>
     </div>
@@ -35,82 +34,49 @@ function renderFoods(items) {
 
 // Render Vendors
 function renderVendors() {
-  const grid = document.getElementById("vendorGrid");
-  grid.innerHTML = vendors.map(v => `
+  const container = document.getElementById("vendorGrid");
+  container.innerHTML = vendors.map(v => `
     <div class="card">
       <img src="${v.img}" alt="${v.name}">
-      <div class="card-info">
-        <h4>${v.name}</h4>
-        <p>${v.desc}</p>
-        <button class="btn btn-outline btn-sm" onclick="alert('Viewing vendor details!')">View Store</button>
+      <div class="card-body">
+        <div class="card-title">${v.name}</div>
+        <div style="font-size: 11px; color: #808191;">${v.desc}</div>
       </div>
     </div>
   `).join('');
 }
 
-// Category Filter Functionality
-function filterCategory(category, element) {
-  document.querySelectorAll('.cat-pill').forEach(btn => btn.classList.remove('active'));
+// Button Functionalities
+function filterCategory(cat, element) {
+  document.querySelectorAll('.cat-btn').forEach(btn => btn.classList.remove('active'));
   if (element) element.classList.add('active');
 
-  if (category === 'all') {
+  if (cat === 'all') {
     renderFoods(foods);
   } else {
-    const filtered = foods.filter(item => item.category === category);
+    const filtered = foods.filter(f => f.category === cat);
     renderFoods(filtered);
   }
 }
 
-// Search Functionality
-function searchFood() {
+function handleSearch() {
   const query = document.getElementById('searchInput').value.toLowerCase();
-  const filtered = foods.filter(food => food.name.toLowerCase().includes(query));
+  const filtered = foods.filter(f => f.name.toLowerCase().includes(query));
   renderFoods(filtered);
 }
 
-// Add to Cart
-function addToCart(foodId) {
-  const item = foods.find(f => f.id === foodId);
-  cart.push(item);
-  document.getElementById('cartCount').innerText = cart.length;
-  alert(`${item.name} added to cart!`);
+function addToCart(itemName) {
+  cartCount++;
+  document.getElementById('cartCount').innerText = cartCount;
+  alert(`${itemName} cart mein add ho gaya hai!`);
 }
 
-// Cart Modal Control
-function toggleCartModal() {
-  const modal = document.getElementById('cartModal');
-  const cartItems = document.getElementById('cartItems');
-  const cartTotal = document.getElementById('cartTotal');
-
-  if (modal.style.display === 'flex') {
-    modal.style.display = 'none';
-  } else {
-    modal.style.display = 'flex';
-    if (cart.length === 0) {
-      cartItems.innerHTML = '<p>Your cart is empty.</p>';
-      cartTotal.innerText = '0.00';
-    } else {
-      cartItems.innerHTML = cart.map(i => `<p style="margin-bottom:8px;">${i.name} - $${i.price.toFixed(2)}</p>`).join('');
-      const total = cart.reduce((sum, item) => sum + item.price, 0);
-      cartTotal.innerText = total.toFixed(2);
-    }
-  }
+function openCart() {
+  alert(`Aapke cart mein total ${cartCount} items hain.`);
 }
 
-function checkout() {
-  if (cart.length === 0) {
-    alert("Your cart is empty!");
-  } else {
-    alert("Order placed successfully!");
-    cart = [];
-    document.getElementById('cartCount').innerText = 0;
-    toggleCartModal();
-  }
-}
-
-// Navigation Helper
 function setActiveNav(element) {
-  document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
   element.classList.add('active');
 }
 
@@ -118,15 +84,15 @@ function scrollToSection(id) {
   document.getElementById(id).scrollIntoView({ behavior: 'smooth' });
 }
 
-function handleLogin() {
-  alert("Login modal / redirect clicked.");
+function triggerAddVendor() {
+  alert("Add Vendor form option open ho gaya hai.");
 }
 
-function openVendorModal() {
-  alert("Add Vendor form opened.");
+function triggerLogin() {
+  alert("Login Page / Modal redirect.");
 }
 
-// Initial Load
+// Initialization
 window.onload = () => {
   renderFoods(foods);
   renderVendors();
