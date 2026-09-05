@@ -132,6 +132,7 @@
             <button class="filter-btn" data-filter="Pizza">Pizza</button>
             <button class="filter-btn" data-filter="Chicken">Chicken</button>
             <button class="filter-btn" data-filter="Desserts">Desserts</button>
+            <button class="filter-btn" data-filter="Drinks">Drinks</button>
         </div>
     </div>
 
@@ -235,9 +236,8 @@
 
             <div class="form-group mb-3">
                 <label>Gmail Address</label>
-                <!-- Only allows valid @gmail.com emails -->
                 <input type="email" id="authEmail" class="form-control" placeholder="you@gmail.com" required pattern="[a-zA-Z0-9._%+-]+@gmail\.com$">
-                <small class="text-muted">Must be a valid Gmail account (e.g., user@gmail.com)</small>
+                <small class="text-muted">Must be a valid Gmail account (e.g. user@gmail.com)</small>
             </div>
 
             <div class="form-group mb-3">
@@ -301,7 +301,6 @@
 
                 <div class="col-md-6">
                     <label>Phone Number (11 Digits, starts with 03)</label>
-                    <!-- Exact 11 digits Pakistani phone number regex -->
                     <input id="vendorPhone" type="tel" maxlength="11" minlength="11" pattern="^03[0-9]{9}$" class="form-control" required placeholder="03001234567">
                 </div>
 
@@ -346,7 +345,6 @@
 
             <div class="form-group mb-3">
                 <label>Phone Number (11 Digits, starts with 03)</label>
-                <!-- Exact 11 digits Pakistani phone number regex -->
                 <input id="deliveryPhone" type="tel" maxlength="11" minlength="11" pattern="^03[0-9]{9}$" class="form-control" required placeholder="03001234567">
             </div>
 
