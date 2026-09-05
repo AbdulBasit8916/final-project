@@ -90,49 +90,11 @@
     </div>
 </section>
 
-<section class="section-block">
-    <div class="section-heading">
-        <div>
-            <span class="eyebrow">Explore</span>
-            <h2>Food Categories</h2>
-        </div>
-    </div>
-
-    <div class="category-grid" id="categoryGrid">
-        <button class="category-card active" data-category="All">
-            <span>🍽️</span><strong>All</strong>
-        </button>
-        <button class="category-card" data-category="Burgers">
-            <span>🍔</span><strong>Burgers</strong>
-        </button>
-        <button class="category-card" data-category="Pizza">
-            <span>🍕</span><strong>Pizza</strong>
-        </button>
-        <button class="category-card" data-category="Chicken">
-            <span>🍗</span><strong>Chicken</strong>
-        </button>
-        <button class="category-card" data-category="Desserts">
-            <span>🍰</span><strong>Desserts</strong>
-        </button>
-        <button class="category-card" data-category="Drinks">
-            <span>🥤</span><strong>Drinks</strong>
-        </button>
-    </div>
-</section>
-
 <section class="section-block" id="menu">
     <div class="section-heading">
         <div>
             <span class="eyebrow">Our Menu</span>
             <h2>Popular Food</h2>
-        </div>
-        <div class="filter-buttons">
-            <button class="filter-btn active" data-filter="All">All</button>
-            <button class="filter-btn" data-filter="Burgers">Burgers</button>
-            <button class="filter-btn" data-filter="Pizza">Pizza</button>
-            <button class="filter-btn" data-filter="Chicken">Chicken</button>
-            <button class="filter-btn" data-filter="Desserts">Desserts</button>
-            <button class="filter-btn" data-filter="Drinks">Drinks</button>
         </div>
     </div>
 
@@ -151,32 +113,6 @@
     <div class="vendor-grid" id="vendorGrid"></div>
 </section>
 
-<section class="section-block orders-section" id="orders">
-    <div class="section-heading">
-        <div>
-            <span class="eyebrow">Your Activity</span>
-            <h2>Recent Orders</h2>
-        </div>
-    </div>
-
-    <div id="ordersContainer" class="orders-container"></div>
-</section>
-
-<section class="section-block profile-section" id="profile">
-    <div class="profile-card">
-        <div class="profile-avatar" id="profileAvatar">G</div>
-        <div class="profile-info">
-            <span class="eyebrow">My Account</span>
-            <h2 id="profileName">Guest User</h2>
-            <p id="profileEmail">Login to manage your account</p>
-        </div>
-        <div class="profile-actions">
-            <button class="primary-btn small" id="profileLoginBtn">Login / Signup</button>
-            <button class="danger-btn small d-none" id="logoutBtn">Logout</button>
-        </div>
-    </div>
-</section>
-
 <footer>
     <div class="footer-brand">
         <div class="brand-mark"><i class="bi bi-egg-fried"></i></div>
@@ -188,71 +124,25 @@
 </main>
 </div>
 
-<div class="cart-drawer" id="cartDrawer">
-    <div class="cart-header d-flex justify-content-between align-items-center">
-        <div>
-            <span class="eyebrow">Your Order</span>
-            <h3>Shopping Cart</h3>
-        </div>
-        <button class="close-btn" id="closeCart"><i class="bi bi-x-lg"></i></button>
-    </div>
-
-    <div class="cart-items" id="cartItems"></div>
-
-    <div class="cart-empty" id="cartEmpty">
-        <i class="bi bi-bag-x fs-1"></i>
-        <h4>Your cart is empty</h4>
-        <p>Add something delicious from the menu.</p>
-    </div>
-
-    <div class="cart-footer d-none" id="cartFooter">
-        <div class="price-row d-flex justify-content-between my-1"><span>Subtotal</span><strong id="cartSubtotal">Rs. 0</strong></div>
-        <div class="price-row d-flex justify-content-between my-1"><span>Delivery</span><strong id="deliveryFee">Rs. 150</strong></div>
-        <div class="price-row total d-flex justify-content-between my-2 border-top pt-2"><span>Total</span><strong id="cartTotal">Rs. 0</strong></div>
-        <button class="primary-btn w-100 justify-content-center mt-3" id="checkoutBtn">Proceed to Checkout <i class="bi bi-arrow-right"></i></button>
-    </div>
-</div>
-
-<div class="drawer-overlay" id="drawerOverlay"></div>
-
 <!-- Auth Modal -->
 <div class="modal fade" id="authModal" tabindex="-1">
 <div class="modal-dialog modal-dialog-centered">
 <div class="modal-content custom-modal">
     <div class="modal-header">
-        <div>
-            <span class="eyebrow" id="authEyebrow">Welcome</span>
-            <h3 id="authTitle">Login to Food Men</h3>
-        </div>
+        <h3>Login to Food Men</h3>
         <button class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
     </div>
-
     <div class="modal-body">
-        <form id="authForm" onsubmit="return false;">
-            <div class="form-group signup-only d-none mb-3">
-                <label>Full Name</label>
-                <input type="text" id="authName" class="form-control" placeholder="Your name" minlength="3">
-            </div>
-
+        <form id="authForm">
             <div class="form-group mb-3">
                 <label>Gmail Address</label>
                 <input type="email" id="authEmail" class="form-control" placeholder="you@gmail.com" required pattern="[a-zA-Z0-9._%+-]+@gmail\.com$">
-                <small class="text-muted">Must be a valid Gmail account (e.g. user@gmail.com)</small>
             </div>
-
             <div class="form-group mb-3">
                 <label>Password</label>
-                <div class="password-wrap">
-                    <input type="password" id="authPassword" class="form-control" placeholder="Enter password" required minlength="6">
-                </div>
+                <input type="password" id="authPassword" class="form-control" required minlength="6">
             </div>
-
-            <button type="submit" class="primary-btn w-100 justify-content-center mt-2" id="authSubmitBtn">Login</button>
-
-            <p class="auth-switch text-center mt-3" id="authSwitchText">
-                Don't have an account? 
-                <button type="button" class="btn btn-link p-0 text-decoration-none" id="switchAuth">Create account</button>
-            </p>
+            <button type="submit" class="primary-btn w-100 justify-content-center">Login</button>
         </form>
     </div>
 </div>
@@ -264,106 +154,26 @@
 <div class="modal-dialog modal-lg modal-dialog-centered">
 <div class="modal-content custom-modal">
     <div class="modal-header">
-        <div>
-            <span class="eyebrow">Grow With Us</span>
-            <h3>Add Your Vendor</h3>
-        </div>
+        <h3>Add Your Vendor</h3>
         <button class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
     </div>
-
     <div class="modal-body">
         <form id="vendorForm">
             <div class="row g-3">
                 <div class="col-md-6">
                     <label>Vendor Name</label>
-                    <input id="vendorName" class="form-control" required placeholder="e.g. Food House" minlength="3">
+                    <input id="vendorName" class="form-control" required minlength="3">
                 </div>
-
                 <div class="col-md-6">
-                    <label>Vendor Type</label>
-                    <select id="vendorType" class="form-select" required>
-                        <option value="">Select type</option>
-                        <option>Restaurant</option>
-                        <option>Home Chef</option>
-                        <option>Packaged Food</option>
-                        <option>Hotel</option>
-                        <option>Hotel Ballroom / Event Venue</option>
-                        <option>Bakery</option>
-                        <option>Café</option>
-                        <option>Catering Service</option>
-                    </select>
-                </div>
-
-                <div class="col-md-6">
-                    <label>Food Category</label>
-                    <input id="vendorCategory" class="form-control" placeholder="e.g. Pakistani, Fast Food" required>
-                </div>
-
-                <div class="col-md-6">
-                    <label>Phone Number (11 Digits, starts with 03)</label>
+                    <label>Phone Number (11 Digits)</label>
                     <input id="vendorPhone" type="tel" maxlength="11" minlength="11" pattern="^03[0-9]{9}$" class="form-control" required placeholder="03001234567">
                 </div>
-
                 <div class="col-12">
-                    <label>Address (Min 10 characters)</label>
-                    <input id="vendorAddress" class="form-control" required minlength="10" placeholder="Street address, Area, City">
-                </div>
-
-                <div class="col-12">
-                    <label>Description</label>
-                    <textarea id="vendorDescription" class="form-control" rows="3" placeholder="Tell customers about your vendor" required minlength="15"></textarea>
+                    <label>Address</label>
+                    <input id="vendorAddress" class="form-control" required minlength="10">
                 </div>
             </div>
-
-            <button class="primary-btn w-100 justify-content-center mt-4" type="submit">
-                Add Vendor <i class="bi bi-check2"></i>
-            </button>
-        </form>
-    </div>
-</div>
-</div>
-</div>
-
-<!-- Checkout Modal -->
-<div class="modal fade" id="checkoutModal" tabindex="-1">
-<div class="modal-dialog modal-dialog-centered">
-<div class="modal-content custom-modal">
-    <div class="modal-header">
-        <div>
-            <span class="eyebrow">Almost Done</span>
-            <h3>Checkout</h3>
-        </div>
-        <button class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
-    </div>
-
-    <div class="modal-body">
-        <form id="checkoutForm">
-            <div class="form-group mb-3">
-                <label>Delivery Address (Min 10 characters)</label>
-                <textarea id="deliveryAddress" class="form-control" required minlength="10" placeholder="House/Flat No, Street, Area, City"></textarea>
-            </div>
-
-            <div class="form-group mb-3">
-                <label>Phone Number (11 Digits, starts with 03)</label>
-                <input id="deliveryPhone" type="tel" maxlength="11" minlength="11" pattern="^03[0-9]{9}$" class="form-control" required placeholder="03001234567">
-            </div>
-
-            <div class="form-group mb-3">
-                <label>Payment Method</label>
-                <select id="paymentMethod" class="form-select" required>
-                    <option>Cash on Delivery</option>
-                    <option>Card Payment</option>
-                </select>
-            </div>
-
-            <div class="checkout-summary d-flex justify-content-between my-3 p-2 bg-dark rounded">
-                <span>Total Payable</span>
-                <strong id="checkoutTotal">Rs. 0</strong>
-            </div>
-
-            <button class="primary-btn w-100 justify-content-center" type="submit">
-                Place Order <i class="bi bi-check-circle"></i>
-            </button>
+            <button class="primary-btn w-100 justify-content-center mt-3" type="submit">Add Vendor</button>
         </form>
     </div>
 </div>
@@ -375,26 +185,16 @@
 <div class="modal-dialog modal-dialog-centered">
 <div class="modal-content custom-modal p-3">
     <div class="food-detail text-center">
-        <img id="detailImg" src="" alt="Food Image" class="img-fluid rounded mb-3" style="max-height: 200px; width: 100%; object-fit: cover;">
-        <span class="eyebrow" id="detailCategory">Food</span>
+        <img id="detailImg" src="" alt="Food" class="img-fluid rounded mb-3" style="max-height: 200px; width: 100%; object-fit: cover;">
         <h3 id="detailName">Food Name</h3>
         <p id="detailDescription" class="text-muted"></p>
-        <div class="detail-bottom d-flex justify-content-between align-items-center mt-3">
+        <div class="d-flex justify-content-between align-items-center mt-3">
             <strong id="detailPrice" class="fs-4">Rs. 0</strong>
-            <button class="primary-btn" id="detailAddBtn">Add to Cart <i class="bi bi-bag-plus"></i></button>
+            <button class="primary-btn" id="detailAddBtn">+ Add to Cart</button>
         </div>
     </div>
 </div>
 </div>
-</div>
-
-<div class="toast-container position-fixed bottom-0 end-0 p-3" style="z-index: 999999;">
-    <div id="appToast" class="toast custom-toast bg-dark text-white border-secondary">
-        <div class="toast-body d-flex align-items-center gap-2">
-            <i class="bi bi-check-circle-fill text-success"></i>
-            <span id="toastMessage">Done</span>
-        </div>
-    </div>
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
