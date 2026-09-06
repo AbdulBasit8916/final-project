@@ -1,138 +1,147 @@
+:root {
+    --bg-dark: #121212;
+    --card-bg: #1e1e1e;
+    --accent: #ff5722;
+    --accent-hover: #e64a19;
+    --text-main: #ffffff;
+    --text-muted: #a0a0a0;
+    --sidebar-width: 260px;
+}
 
 body {
-    background-color: var(--bg-dark);
-    color: var(--text-main);
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    margin: 0;
+    background-color: var(--bg-dark);
+    color: var(--text-main);
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin: 0;
 }
 
 .app-shell {
-    display: flex;
-    min-height: 100vh;
+    display: flex;
+    min-height: 100vh;
 }
 
 .sidebar {
-    width: var(--sidebar-width);
-    background: #181818;
-    padding: 1.5rem;
-    display: flex;
-    flex-direction: column;
-    position: fixed;
-    height: 100vh;
+    width: var(--sidebar-width);
+    background: #181818;
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    position: fixed;
+    height: 100vh;
 }
 
 .brand {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    font-size: 1.25rem;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 1.25rem;
 }
 
 .brand-mark {
-    background: var(--accent);
-    width: 38px;
-    height: 38px;
-    border-radius: 8px;
-    display: grid;
-    place-items: center;
+    background: var(--accent);
+    width: 38px;
+    height: 38px;
+    border-radius: 8px;
+    display: grid;
+    place-items: center;
 }
 
 .side-nav {
-    margin-top: 2rem;
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
+    margin-top: 2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
 }
 
 .side-nav .nav-link {
-    color: var(--text-muted);
-    padding: 0.75rem 1rem;
-    border-radius: 8px;
-    text-decoration: none;
-    display: flex;
-    align-items: center;
-    gap: 10px;
+    color: var(--text-muted);
+    padding: 0.75rem 1rem;
+    border-radius: 8px;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 10px;
 }
 
 .side-nav .nav-link.active, .side-nav .nav-link:hover {
-    background: var(--card-bg);
-    color: var(--accent);
+    background: var(--card-bg);
+    color: var(--accent);
 }
 
 .main-content {
-    margin-left: var(--sidebar-width);
-    flex: 1;
-    padding: 2rem;
+    margin-left: var(--sidebar-width);
+    flex: 1;
+    padding: 2rem;
 }
 
-/* Food Grid Cards Style Matching User Image */
+/* Food Grid Styles */
 .food-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-    gap: 1.25rem;
-    margin-top: 1.5rem;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 1.25rem;
+    margin-top: 1.5rem;
 }
 
 .food-card {
-    background: var(--card-bg);
-    border-radius: 16px;
-    overflow: hidden;
-    border: 1px solid #2d2d2d;
-    transition: transform 0.2s ease;
+    background: var(--card-bg);
+    border-radius: 16px;
+    overflow: hidden;
+    border: 1px solid #2d2d2d;
+    transition: transform 0.2s ease;
 }
 
 .food-card:hover {
-    transform: translateY(-4px);
+    transform: translateY(-4px);
 }
 
 .food-card-img {
-    width: 100%;
-    height: 150px;
-    object-fit: cover;
+    width: 100%;
+    height: 150px;
+    object-fit: cover;
 }
 
 .food-card-body {
-    padding: 1rem;
+    padding: 1rem;
 }
 
 .food-title {
-    font-size: 1.1rem;
-    font-weight: 600;
-    color: #ffffff;
-    margin-bottom: 6px;
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: #ffffff;
+    margin-bottom: 6px;
 }
 
 .add-btn {
-    background-color: var(--accent);
-    color: #fff;
-    border: none;
-    padding: 6px 16px;
-    border-radius: 8px;
-    font-weight: 600;
-    cursor: pointer;
+    background-color: var(--accent);
+    color: #fff;
+    border: none;
+    padding: 6px 16px;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
 }
 
 .add-btn:hover {
-    background-color: var(--accent-hover);
+    background-color: var(--accent-hover);
 }
 
 .primary-btn {
-    background: var(--accent);
-    color: #fff;
-    border: none;
-    padding: 0.6rem 1.2rem;
-    border-radius: 8px;
-    text-decoration: none;
+    background: var(--accent);
+    color: #fff;
+    border: none;
+    padding: 0.6rem 1.2rem;
+    border-radius: 8px;
+    text-decoration: none;
 }
 
 .custom-modal {
-    background: var(--card-bg);
-    color: #fff;
-    border: 1px solid #333;
+    background: var(--card-bg);
+    color: #fff;
+    border: 1px solid #333;
 }
 
 .custom-modal input, .custom-modal textarea {
-    background: #121212;
-    border: 1px solid #333;
-    color: #fff;
+    background: #121212;
+    border: 1px solid #333;
+    color: #fff;
 }
