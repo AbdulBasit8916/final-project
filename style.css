@@ -8,11 +8,16 @@
     --sidebar-width: 260px;
 }
 
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
 body {
     background-color: var(--bg-dark);
     color: var(--text-main);
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    margin: 0;
 }
 
 .app-shell {
@@ -20,6 +25,7 @@ body {
     min-height: 100vh;
 }
 
+/* Sidebar Styling */
 .sidebar {
     width: var(--sidebar-width);
     background: #181818;
@@ -28,6 +34,7 @@ body {
     flex-direction: column;
     position: fixed;
     height: 100vh;
+    z-index: 100;
 }
 
 .brand {
@@ -68,13 +75,203 @@ body {
     color: var(--accent);
 }
 
+.sidebar-bottom {
+    margin-top: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.vendor-btn, .login-side-btn {
+    background: #282828;
+    color: #fff;
+    border: 1px solid #333;
+    padding: 0.6rem;
+    border-radius: 8px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+.vendor-btn:hover, .login-side-btn:hover {
+    background: #333;
+}
+
+/* Main Content & Topbar Styling */
 .main-content {
     margin-left: var(--sidebar-width);
     flex: 1;
-    padding: 2rem;
+    padding: 1.5rem 2rem;
 }
 
-/* Food Grid Styles */
+.topbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+    gap: 1rem;
+}
+
+.top-search {
+    position: relative;
+    width: 300px;
+}
+
+.top-search i {
+    position: absolute;
+    left: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--text-muted);
+}
+
+.top-search input {
+    width: 100%;
+    background: var(--card-bg);
+    border: 1px solid #333;
+    padding: 8px 12px 8px 36px;
+    border-radius: 8px;
+    color: #fff;
+    outline: none;
+}
+
+.top-actions {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.icon-btn {
+    background: var(--card-bg);
+    border: 1px solid #333;
+    color: #fff;
+    padding: 8px 14px;
+    border-radius: 8px;
+    position: relative;
+    cursor: pointer;
+}
+
+.cart-count {
+    background: var(--accent);
+    color: #fff;
+    font-size: 0.75rem;
+    padding: 2px 6px;
+    border-radius: 10px;
+    margin-left: 4px;
+}
+
+.profile-mini {
+    background: var(--card-bg);
+    border: 1px solid #333;
+    color: #fff;
+    padding: 6px 12px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+}
+
+.avatar {
+    background: var(--accent);
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    display: grid;
+    place-items: center;
+    font-size: 0.85rem;
+    font-weight: bold;
+}
+
+/* Hero Section Styling */
+.hero-section {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 2rem 0;
+    gap: 2rem;
+    flex-wrap: wrap;
+}
+
+.hero-content {
+    max-width: 500px;
+}
+
+.hero-badge {
+    background: rgba(255, 87, 34, 0.15);
+    color: var(--accent);
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    display: inline-block;
+    margin-bottom: 1rem;
+}
+
+.hero-content h1 {
+    font-size: 3rem;
+    line-height: 1.1;
+    margin-bottom: 1rem;
+}
+
+.hero-content h1 span {
+    color: var(--accent);
+}
+
+.hero-content p {
+    color: var(--text-muted);
+    margin-bottom: 1.5rem;
+}
+
+.hero-actions {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+}
+
+.primary-btn {
+    background: var(--accent);
+    color: #fff;
+    border: none;
+    padding: 0.75rem 1.5rem;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: 600;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.primary-btn:hover {
+    background: var(--accent-hover);
+    color: #fff;
+}
+
+.secondary-btn, .outline-btn {
+    color: var(--text-muted);
+    text-decoration: none;
+    background: transparent;
+    border: 1px solid #333;
+    padding: 0.75rem 1.5rem;
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+.secondary-btn:hover, .outline-btn:hover {
+    color: #fff;
+    border-color: #555;
+}
+
+.hero-food {
+    position: relative;
+}
+
+/* Food Grid Cards */
+.section-block {
+    margin-top: 3rem;
+}
+
 .food-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
@@ -123,15 +320,6 @@ body {
 
 .add-btn:hover {
     background-color: var(--accent-hover);
-}
-
-.primary-btn {
-    background: var(--accent);
-    color: #fff;
-    border: none;
-    padding: 0.6rem 1.2rem;
-    border-radius: 8px;
-    text-decoration: none;
 }
 
 .custom-modal {
