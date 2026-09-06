@@ -4,127 +4,36 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Good Food Good Mood</title>
-  
+
   <!-- Bootstrap 5 CSS -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
   <!-- Bootstrap Icons -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
-  
-  <style>
-    body {
-      background-color: #121212;
-      color: #ffffff;
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    }
-    
-    .navbar {
-      background-color: #1c1c1c !important;
-      border-bottom: 2px solid #ff9900;
-    }
-
-    .navbar-brand {
-      color: #ff9900 !important;
-      font-weight: bold;
-      font-size: 1.5rem;
-    }
-
-    .btn-warning {
-      background-color: #ff9900 !important;
-      border-color: #ff9900 !important;
-      color: #000000 !important;
-      font-weight: 600;
-    }
-
-    .btn-warning:hover {
-      background-color: #e68a00 !important;
-      border-color: #e68a00 !important;
-    }
-
-    .btn-outline-warning {
-      color: #ff9900 !important;
-      border-color: #ff9900 !important;
-    }
-
-    .btn-outline-warning:hover {
-      background-color: #ff9900 !important;
-      color: #000000 !important;
-    }
-
-    .food-card {
-      background-color: #1c1c1c;
-      border: 1px solid #333333;
-      border-radius: 12px;
-      overflow: hidden;
-      transition: transform 0.2s, box-shadow 0.2s;
-    }
-    
-    .food-card:hover {
-      transform: translateY(-5px);
-      box-shadow: 0 5px 15px rgba(255, 153, 0, 0.3);
-    }
-
-    .food-card-img {
-      width: 100%;
-      height: 180px;
-      object-fit: cover;
-    }
-
-    .food-card-body {
-      padding: 15px;
-    }
-
-    .food-title {
-      font-size: 1.2rem;
-      font-weight: bold;
-      color: #ffffff;
-    }
-
-    .text-orange {
-      color: #ff9900 !important;
-    }
-
-    .modal-content {
-      background-color: #1c1c1c;
-      color: #ffffff;
-      border: 1px solid #ff9900;
-    }
-
-    .form-control {
-      background-color: #2a2a2a;
-      border: 1px solid #444444;
-      color: #ffffff;
-    }
-
-    .form-control:focus {
-      background-color: #333333;
-      color: #ffffff;
-      border-color: #ff9900;
-      box-shadow: 0 0 5px rgba(255, 153, 0, 0.5);
-    }
-  </style>
+  <!-- Custom Style -->
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
   <!-- NAVBAR -->
-  <nav class="navbar navbar-expand-lg navbar-dark sticky-top py-3">
+  <nav class="navbar navbar-expand-lg sticky-top py-3">
     <div class="container">
       <a class="navbar-brand d-flex align-items-center gap-2" href="#">
         <i class="bi bi-cup-hot-fill"></i>
         <span>Good Food Good Mood</span>
       </a>
-      
+
       <div class="d-flex align-items-center gap-3 ms-auto">
-        <!-- Search Input -->
-        <div class="input-group" style="max-width: 220px;">
+        <!-- Search Bar -->
+        <div class="input-group" style="max-width: 200px;">
           <input type="text" id="searchInput" class="form-control form-control-sm" placeholder="Search menu...">
         </div>
 
-        <!-- Vendor Modal Trigger -->
+        <!-- Add Vendor Button -->
         <button class="btn btn-warning btn-sm d-flex align-items-center gap-1" data-bs-toggle="modal" data-bs-target="#vendorModal">
           <i class="bi bi-shop"></i> Add Vendor
         </button>
 
-        <!-- Auth Modal Trigger -->
+        <!-- Auth Button -->
         <button class="btn btn-outline-warning btn-sm d-flex align-items-center gap-2" data-bs-toggle="modal" data-bs-target="#authModal">
           <span id="topAvatar" class="bg-warning text-dark rounded-circle d-flex align-items-center justify-content-center fw-bold" style="width:22px; height:22px; font-size:11px;">
             <i class="bi bi-person-fill"></i>
@@ -132,7 +41,7 @@
           <span id="topUserName">Login</span>
         </button>
 
-        <!-- Cart Badge -->
+        <!-- Cart Icon -->
         <div class="position-relative">
           <button class="btn btn-dark border-secondary text-orange btn-sm fs-5">
             <i class="bi bi-cart3"></i>
@@ -143,9 +52,9 @@
     </div>
   </nav>
 
-  <!-- MAIN CONTENT -->
+  <!-- MAIN CONTAINER -->
   <div class="container my-4">
-    <!-- Menu Title -->
+    <!-- Menu Heading -->
     <div class="d-flex justify-content-between align-items-center mb-4">
       <h3 class="fw-bold text-orange d-flex align-items-center gap-2">
         <i class="bi bi-grid-fill"></i> Our Menu
@@ -154,19 +63,19 @@
 
     <!-- FOOD GRID CONTAINER -->
     <div id="foodGrid" class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-4">
-      <!-- JavaScript dynamic items inject karega -->
+      <!-- Dynamic Food Cards -->
     </div>
 
-    <!-- VENDORS SECTION -->
+    <!-- REGISTERED VENDORS FROM DATABASE -->
     <div class="mt-5 pt-4 border-top border-secondary">
       <h4 class="fw-bold mb-3 text-orange"><i class="bi bi-people-fill me-2"></i>Registered Vendors</h4>
       <div id="vendorGrid" class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
-        <!-- Database vendors dynamic render honge -->
+        <!-- Dynamic Vendors -->
       </div>
     </div>
   </div>
 
-  <!-- AUTH MODAL -->
+  <!-- AUTH MODAL (Login / Signup) -->
   <div class="modal fade" id="authModal" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
       <div class="modal-content">
@@ -222,8 +131,8 @@
 
   <!-- Bootstrap JS -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-  
-  <!-- Firebase & App Logic JS -->
+
+  <!-- JavaScript App Logic -->
   <script type="module" src="script.js"></script>
 </body>
 </html>
