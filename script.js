@@ -1,21 +1,3 @@
-// Firebase Module Imports
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-import { getFirestore, collection, addDoc, getDocs } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
-
-// Firebase Config Credentials (Integrated Directly)
-const firebaseConfig = {
-  apiKey: "AIzaSyBZCFbZhvGRHZtRPpuP3l70aTSrrZP8V4g",
-  authDomain: "good-food-good-mood-a6a35.firebaseapp.com",
-  projectId: "good-food-good-mood-a6a35",
-  storageBucket: "good-food-good-mood-a6a35.firebasestorage.app",
-  messagingSenderId: "632916799004",
-  appId: "1:632916799004:web:329938c2857fec6f9db9d9"
-};
-
-// Initialize Firebase & Firestore
-const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
-
 // Sample Food Items with Real HD Images
 const sampleFoodItems = [
     { 
@@ -76,12 +58,14 @@ const sampleFoodItems = [
     }
 ];
 
+// Local Vendors Array
+let vendors = [];
 let cartCount = 0;
 
 document.addEventListener("DOMContentLoaded", () => {
     renderFoodGrid(sampleFoodItems);
     setupEventListeners();
-    fetchVendors();
+    renderVendors();
 });
 
 // Render Food Grid
@@ -142,35 +126,29 @@ function openFoodModal(id) {
     }
 }
 
-// Vendor Data Fetching from Firebase Database
-async function fetchVendors() {
+// Render Local Vendors
+function renderVendors() {
     const vendorGrid = document.getElementById("vendorGrid");
     if (!vendorGrid) return;
 
-    try {
-        const querySnapshot = await getDocs(collection(db, "vendors"));
-        if (querySnapshot.empty) {
-            vendorGrid.innerHTML = `<p class="text-muted">No vendors found in database.</p>`;
-            return;
-        }
-
-        vendorGrid.innerHTML = "";
-        querySnapshot.forEach((doc) => {
-            const data = doc.data();
-            vendorGrid.innerHTML += `
-                <div class="card bg-dark text-white p-3 border-secondary mb-3">
-                    <h5>${data.name}</h5>
-                    <p class="mb-1 text-muted"><i class="bi bi-geo-alt"></i> ${data.address}</p>
-                    <small class="text-secondary"><i class="bi bi-telephone"></i> ${data.phone}</small>
-                </div>
-            `;
-        });
-    } catch (error) {
-        console.error("Error fetching vendors: ", error);
+    if (vendors.length === 0) {
+        vendorGrid.innerHTML = `<p class="text-muted">No vendors added yet.</p>`;
+        return;
     }
+
+    vendorGrid.innerHTML = "";
+    vendors.forEach((data) => {
+        vendorGrid.innerHTML += `
+            <div class="card bg-dark text-white p-3 border-secondary mb-3">
+                <h5>${data.name}</h5>
+                <p class="mb-1 text-muted"><i class="bi bi-geo-alt"></i> ${data.address}</p>
+                <small class="text-secondary"><i class="bi bi-telephone"></i> ${data.phone}</small>
+            </div>
+        `;
+    });
 }
 
-// Event Listeners and Firebase Store Implementation
+// Event Listeners Implementation
 function setupEventListeners() {
     document.getElementById("authForm")?.addEventListener("submit", (e) => {
         e.preventDefault();
@@ -181,32 +159,29 @@ function setupEventListeners() {
         }
     });
 
-    // Save Vendor to Firebase Firestore Database
-    document.getElementById("vendorForm")?.addEventListener("submit", async (e) => {
+    // Save Vendor Locally
+    document.getElementById("vendorForm")?.addEventListener("submit", (e) => {
         e.preventDefault();
 
         const name = document.getElementById("vendorName").value;
         const phone = document.getElementById("vendorPhone").value;
         const address = document.getElementById("vendorAddress").value;
 
-        try {
-            await addDoc(collection(db, "vendors"), {
-                name: name,
-                phone: phone,
-                address: address,
-                timestamp: new Date()
-            });
+        vendors.push({
+            name: name,
+            phone: phone,
+            address: address
+        });
 
-            alert("Vendor added directly into Firebase Database!");
-            document.getElementById("vendorForm").reset();
-            const vendorModalEl = document.getElementById("vendorModal");
-            if (vendorModalEl && window.bootstrap) {
-                bootstrap.Modal.getInstance(vendorModalEl)?.hide();
-            }
-            fetchVendors();
-        } catch (error) {
-            alert("Firebase Store Error: " + error.message);
+        alert("Vendor added successfully!");
+        document.getElementById("vendorForm").reset();
+        
+        const vendorModalEl = document.getElementById("vendorModal");
+        if (vendorModalEl && window.bootstrap) {
+            bootstrap.Modal.getInstance(vendorModalEl)?.hide();
         }
+        
+        renderVendors();
     });
 
     document.getElementById("openVendorBtn")?.addEventListener("click", () => {
@@ -215,12 +190,14 @@ function setupEventListeners() {
             new bootstrap.Modal(vendorModalEl).show();
         }
     });
+    
     document.getElementById("openVendorBtn2")?.addEventListener("click", () => {
         const vendorModalEl = document.getElementById("vendorModal");
         if (vendorModalEl && window.bootstrap) {
             new bootstrap.Modal(vendorModalEl).show();
         }
     });
+
     document.getElementById("sideLoginBtn")?.addEventListener("click", () => {
         const authModalEl = document.getElementById("authModal");
         if (authModalEl && window.bootstrap) {
