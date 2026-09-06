@@ -1,4 +1,4 @@
-// Sample Food Items with Real HD Images
+// Sample Data with Real High Quality Images Matching Image Provided
 const sampleFoodItems = [
     { 
         id: 1, 
@@ -58,17 +58,14 @@ const sampleFoodItems = [
     }
 ];
 
-// Local Vendors Array
-let vendors = [];
 let cartCount = 0;
 
 document.addEventListener("DOMContentLoaded", () => {
     renderFoodGrid(sampleFoodItems);
     setupEventListeners();
-    renderVendors();
 });
 
-// Render Food Grid
+// Render Food Items in UI
 function renderFoodGrid(items) {
     const grid = document.getElementById("foodGrid");
     if (!grid) return;
@@ -81,19 +78,11 @@ function renderFoodGrid(items) {
                 <span class="badge bg-secondary mb-2">${item.category}</span>
                 <div class="d-flex justify-content-between align-items-center mt-2">
                     <strong class="text-white fs-6">Rs. ${item.price}</strong>
-                    <button class="add-btn" data-id="${item.id}">+ Add</button>
+                    <button class="add-btn" onclick="openFoodModal(${item.id})">+ Add</button>
                 </div>
             </div>
         </div>
     `).join("");
-
-    // Event Listener for Modal Trigger
-    document.querySelectorAll(".add-btn").forEach(btn => {
-        btn.addEventListener("click", (e) => {
-            const id = parseInt(e.target.getAttribute("data-id"));
-            openFoodModal(id);
-        });
-    });
 }
 
 // Modal View
@@ -109,99 +98,34 @@ function openFoodModal(id) {
     const addBtn = document.getElementById("detailAddBtn");
     addBtn.onclick = () => {
         cartCount++;
-        const cartCountEl = document.getElementById("cartCount");
-        if (cartCountEl) cartCountEl.innerText = cartCount;
+        document.getElementById("cartCount").innerText = cartCount;
         alert(`${item.name} added to cart!`);
         const modalEl = document.getElementById("foodModal");
-        if (modalEl && window.bootstrap) {
-            const modal = bootstrap.Modal.getInstance(modalEl) || new bootstrap.Modal(modalEl);
-            modal.hide();
-        }
+        const modal = bootstrap.Modal.getInstance(modalEl) || new bootstrap.Modal(modalEl);
+        modal.hide();
     };
 
-    const foodModalEl = document.getElementById("foodModal");
-    if (foodModalEl && window.bootstrap) {
-        const foodModal = new bootstrap.Modal(foodModalEl);
-        foodModal.show();
-    }
+    const foodModal = new bootstrap.Modal(document.getElementById("foodModal"));
+    foodModal.show();
 }
 
-// Render Local Vendors
-function renderVendors() {
-    const vendorGrid = document.getElementById("vendorGrid");
-    if (!vendorGrid) return;
-
-    if (vendors.length === 0) {
-        vendorGrid.innerHTML = `<p class="text-muted">No vendors added yet.</p>`;
-        return;
-    }
-
-    vendorGrid.innerHTML = "";
-    vendors.forEach((data) => {
-        vendorGrid.innerHTML += `
-            <div class="card bg-dark text-white p-3 border-secondary mb-3">
-                <h5>${data.name}</h5>
-                <p class="mb-1 text-muted"><i class="bi bi-geo-alt"></i> ${data.address}</p>
-                <small class="text-secondary"><i class="bi bi-telephone"></i> ${data.phone}</small>
-            </div>
-        `;
-    });
-}
-
-// Event Listeners Implementation
 function setupEventListeners() {
     document.getElementById("authForm")?.addEventListener("submit", (e) => {
         e.preventDefault();
         alert("Logged in successfully!");
-        const authModalEl = document.getElementById("authModal");
-        if (authModalEl && window.bootstrap) {
-            bootstrap.Modal.getInstance(authModalEl)?.hide();
-        }
+        bootstrap.Modal.getInstance(document.getElementById("authModal")).hide();
     });
 
-    // Save Vendor Locally
     document.getElementById("vendorForm")?.addEventListener("submit", (e) => {
         e.preventDefault();
-
-        const name = document.getElementById("vendorName").value;
-        const phone = document.getElementById("vendorPhone").value;
-        const address = document.getElementById("vendorAddress").value;
-
-        vendors.push({
-            name: name,
-            phone: phone,
-            address: address
-        });
-
-        alert("Vendor added successfully!");
-        document.getElementById("vendorForm").reset();
-        
-        const vendorModalEl = document.getElementById("vendorModal");
-        if (vendorModalEl && window.bootstrap) {
-            bootstrap.Modal.getInstance(vendorModalEl)?.hide();
-        }
-        
-        renderVendors();
+        alert("Vendor details saved successfully!");
+        bootstrap.Modal.getInstance(document.getElementById("vendorModal")).hide();
     });
 
     document.getElementById("openVendorBtn")?.addEventListener("click", () => {
-        const vendorModalEl = document.getElementById("vendorModal");
-        if (vendorModalEl && window.bootstrap) {
-            new bootstrap.Modal(vendorModalEl).show();
-        }
+        new bootstrap.Modal(document.getElementById("vendorModal")).show();
     });
-    
-    document.getElementById("openVendorBtn2")?.addEventListener("click", () => {
-        const vendorModalEl = document.getElementById("vendorModal");
-        if (vendorModalEl && window.bootstrap) {
-            new bootstrap.Modal(vendorModalEl).show();
-        }
-    });
-
     document.getElementById("sideLoginBtn")?.addEventListener("click", () => {
-        const authModalEl = document.getElementById("authModal");
-        if (authModalEl && window.bootstrap) {
-            new bootstrap.Modal(authModalEl).show();
-        }
+        new bootstrap.Modal(document.getElementById("authModal")).show();
     });
 }
