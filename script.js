@@ -4,13 +4,14 @@ import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, on
 
 // FIREBASE CONFIGURATION
 const firebaseConfig = {
-  apiKey: "YOUR_API_KEY_HERE", // 👈 Config radio button click karke jo API Key milegi wo yahan likhein
+  apiKey: "AIzaSyBZCfbZhvGRHZtRPpup3l70aTSrrZP8V4g",
   authDomain: "good-food-good-mood-a6a35.firebaseapp.com",
   databaseURL: "https://good-food-good-mood-a6a35-default-rtdb.firebaseio.com",
   projectId: "good-food-good-mood-a6a35",
-  storageBucket: "good-food-good-mood-a6a35.appspot.com",
+  storageBucket: "good-food-good-mood-a6a35.firebasestorage.app",
   messagingSenderId: "632916799004",
-  appId: "1:632916799004:web:329938c2857fec6f9db9d9"
+  appId: "1:632916799004:web:329938c2857fec6f9db9d9",
+  measurementId: "G-GSGHRWV493"
 };
 
 // Initialize Firebase
