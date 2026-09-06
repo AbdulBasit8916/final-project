@@ -1,21 +1,25 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
 import { getDatabase, ref, push, onValue } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
-import { getAuth, signInWithEmailAndPassword, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
 
+// FIREBASE CONFIGURATION (CONNECTED WITH YOUR PROJECT)
 const firebaseConfig = {
-  apiKey: "YOUR_API_KEY",
-  authDomain: "YOUR_PROJECT_ID.firebaseapp.com",
-  databaseURL: "https://YOUR_PROJECT_ID-default-rtdb.firebaseio.com",
-  projectId: "YOUR_PROJECT_ID",
-  storageBucket: "YOUR_PROJECT_ID.appspot.com",
-  messagingSenderId: "YOUR_SENDER_ID",
-  appId: "YOUR_APP_ID"
+  apiKey: "AIzaSyBZCFbZhvGRHZtRPpuP3l70aTSrrZP8V4g",
+  authDomain: "good-food-good-mood-a6a35.firebaseapp.com",
+  databaseURL: "https://good-food-good-mood-a6a35-default-rtdb.firebaseio.com",
+  projectId: "good-food-good-mood-a6a35",
+  storageBucket: "good-food-good-mood-a6a35.firebasestorage.app",
+  messagingSenderId: "632916799004",
+  appId: "1:632916799004:web:329938c2857fec6f9db9d9",
+  measurementId: "G-GSGHRWV493"
 };
 
+// Initialize Firebase
 const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
 const auth = getAuth(app);
 
+// FOOD ITEMS DATA WITH REAL IMAGES
 const foodItemsData = [
   {
     id: "f1",
@@ -75,6 +79,7 @@ const foodItemsData = [
 
 let cart = [];
 
+// 1. RENDER FOOD MENU GRID
 function renderFoodGrid(items) {
   const foodGrid = document.getElementById("foodGrid");
   if (!foodGrid) return;
@@ -88,7 +93,7 @@ function renderFoodGrid(items) {
           <small class="text-muted">${item.category}</small>
         </div>
         <h5 class="food-title">${item.name}</h5>
-        <p class="text-muted small text-truncate" style="max-width: 200px;">${item.desc}</p>
+        <p class="text-muted small text-truncate">${item.desc}</p>
         <div class="d-flex justify-content-between align-items-center mt-3">
           <span class="fw-bold fs-5">Rs. ${item.price}</span>
           <button class="add-btn btn-add-cart" data-id="${item.id}">+ Add</button>
@@ -106,6 +111,7 @@ function renderFoodGrid(items) {
   });
 }
 
+// 2. ADD TO CART & FIREBASE ORDER SYNC
 function addToCart(foodId) {
   const item = foodItemsData.find(f => f.id === foodId);
   if (item) {
@@ -114,46 +120,19 @@ function addToCart(foodId) {
     if (cartCountEl) cartCountEl.innerText = cart.length;
 
     try {
-      const ordersRef = ref(db, "orders");
-      push(ordersRef, {
+      push(ref(db, "orders"), {
         itemId: item.id,
         itemName: item.name,
         price: item.price,
         timestamp: new Date().toISOString()
       });
     } catch (err) {
-      console.log(err);
+      console.log("Database Sync Note:", err);
     }
   }
 }
 
-function listenToVendors() {
-  const vendorGrid = document.getElementById("vendorGrid");
-  if (!vendorGrid) return;
-
-  const vendorsRef = ref(db, "vendors");
-  onValue(vendorsRef, (snapshot) => {
-    const data = snapshot.val();
-    if (data) {
-      const vendorList = Object.values(data);
-      vendorGrid.innerHTML = vendorList.map(v => `
-        <div class="card bg-dark text-white p-3 border-secondary rounded-3">
-          <div class="d-flex align-items-center gap-3">
-            <div class="bg-warning text-dark fw-bold rounded-circle p-3 d-grid place-items-center" style="width: 48px; height: 48px;">
-              ${v.name ? v.name.charAt(0).toUpperCase() : 'V'}
-            </div>
-            <div>
-              <h6 class="mb-0 fw-bold">${v.name}</h6>
-              <small class="text-muted"><i class="bi bi-geo-alt"></i> ${v.address}</small><br>
-              <small class="text-warning"><i class="bi bi-telephone"></i> ${v.phone}</small>
-            </div>
-          </div>
-        </div>
-      `).join('');
-    }
-  });
-}
-
+// 3. SEARCH FILTER
 const searchInput = document.getElementById("searchInput");
 if (searchInput) {
   searchInput.addEventListener("input", (e) => {
@@ -166,52 +145,103 @@ if (searchInput) {
   });
 }
 
-const vendorForm = document.getElementById("vendorForm");
-if (vendorForm) {
-  vendorForm.addEventListener("submit", (e) => {
-    e.preventDefault();
-    const name = document.getElementById("vendorName")?.value;
-    const phone = document.getElementById("vendorPhone")?.value;
-    const address = document.getElementById("vendorAddress")?.value;
-
-    if (name && phone && address) {
-      const vendorsRef = ref(db, "vendors");
-      push(vendorsRef, { name, phone, address, createdAt: new Date().toISOString() })
-        .then(() => {
-          alert("Vendor added successfully!");
-          vendorForm.reset();
-        })
-        .catch(err => alert("Error: " + err.message));
-    }
-  });
-}
-
+// 4. FIREBASE AUTHENTICATION (LOGIN & AUTO-SIGNUP)
 const authForm = document.getElementById("authForm");
 if (authForm) {
   authForm.addEventListener("submit", (e) => {
     e.preventDefault();
-    const email = document.getElementById("authEmail")?.value;
-    const password = document.getElementById("authPassword")?.value;
+    const email = document.getElementById("authEmail").value;
+    const password = document.getElementById("authPassword").value;
 
     signInWithEmailAndPassword(auth, email, password)
       .then(() => {
-        alert("Logged in successfully!");
+        alert("Login successful!");
+        closeModal('authModal');
       })
       .catch((err) => {
-        alert("Auth Note: " + err.message);
+        if (err.code === 'auth/user-not-found' || err.code === 'auth/invalid-credential') {
+          createUserWithEmailAndPassword(auth, email, password)
+            .then(() => {
+              alert("Account created and logged in!");
+              closeModal('authModal');
+            })
+            .catch(error => alert(error.message));
+        } else {
+          alert("Firebase Error: " + err.message);
+        }
       });
   });
 }
 
+// 5. USER STATE SYNC
 onAuthStateChanged(auth, (user) => {
   const topUserName = document.getElementById("topUserName");
   const topAvatar = document.getElementById("topAvatar");
   
-  if (user && topUserName) {
-    topUserName.innerText = user.email.split('@')[0];
+  if (user) {
+    if (topUserName) topUserName.innerText = user.email.split('@')[0];
     if (topAvatar) topAvatar.innerText = user.email.charAt(0).toUpperCase();
   }
 });
+
+// 6. ADD VENDOR TO FIREBASE DATABASE
+const vendorForm = document.getElementById("vendorForm");
+if (vendorForm) {
+  vendorForm.addEventListener("submit", (e) => {
+    e.preventDefault();
+    const name = document.getElementById("vendorName").value;
+    const phone = document.getElementById("vendorPhone").value;
+    const address = document.getElementById("vendorAddress").value;
+
+    push(ref(db, "vendors"), {
+      name: name,
+      phone: phone,
+      address: address,
+      createdAt: new Date().toISOString()
+    })
+    .then(() => {
+      alert("Vendor added successfully!");
+      vendorForm.reset();
+      closeModal('vendorModal');
+    })
+    .catch((err) => alert("Database Error: " + err.message));
+  });
+}
+
+// 7. LISTEN TO REALTIME VENDORS FROM DATABASE
+function listenToVendors() {
+  const vendorGrid = document.getElementById("vendorGrid");
+  if (!vendorGrid) return;
+
+  onValue(ref(db, "vendors"), (snapshot) => {
+    const data = snapshot.val();
+    if (data) {
+      const vendorList = Object.values(data);
+      vendorGrid.innerHTML = vendorList.map(v => `
+        <div class="card bg-dark text-white p-3 border-secondary rounded-3">
+          <div class="d-flex align-items-center gap-3">
+            <div class="bg-warning text-dark fw-bold rounded-circle p-3 d-grid place-items-center" style="width: 44px; height: 44px;">
+              ${v.name ? v.name.charAt(0).toUpperCase() : 'V'}
+            </div>
+            <div>
+              <h6 class="mb-0 fw-bold">${v.name}</h6>
+              <small class="text-muted">${v.address}</small><br>
+              <small class="text-warning">${v.phone}</small>
+            </div>
+          </div>
+        </div>
+      `).join('');
+    }
+  });
+}
+
+function closeModal(modalId) {
+  const modalElement = document.getElementById(modalId);
+  if (modalElement && window.bootstrap) {
+    const modal = bootstrap.Modal.getInstance(modalElement) || new bootstrap.Modal(modalElement);
+    modal.hide();
+  }
+}
 
 document.addEventListener("DOMContentLoaded", () => {
   renderFoodGrid(foodItemsData);
