@@ -1,4 +1,22 @@
-// Sample Data with Real High Quality Images Matching Image Provided
+// Firebase Module Imports
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+import { getFirestore, collection, addDoc, getDocs } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+// Firebase Config credentials (Replace with your actual Firebase Project credentials)
+const firebaseConfig = {
+    apiKey: "YOUR_API_KEY",
+    authDomain: "YOUR_PROJECT_ID.firebaseapp.com",
+    projectId: "YOUR_PROJECT_ID",
+    storageBucket: "YOUR_PROJECT_ID.appspot.com",
+    messagingSenderId: "YOUR_SENDER_ID",
+    appId: "YOUR_APP_ID"
+};
+
+// Initialize Firebase & Firestore
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+
+// Sample Food Items with Real HD Images
 const sampleFoodItems = [
     { 
         id: 1, 
@@ -63,9 +81,10 @@ let cartCount = 0;
 document.addEventListener("DOMContentLoaded", () => {
     renderFoodGrid(sampleFoodItems);
     setupEventListeners();
+    fetchVendors();
 });
 
-// Render Food Items in UI
+// Render Food Grid
 function renderFoodGrid(items) {
     const grid = document.getElementById("foodGrid");
     if (!grid) return;
@@ -78,11 +97,19 @@ function renderFoodGrid(items) {
                 <span class="badge bg-secondary mb-2">${item.category}</span>
                 <div class="d-flex justify-content-between align-items-center mt-2">
                     <strong class="text-white fs-6">Rs. ${item.price}</strong>
-                    <button class="add-btn" onclick="openFoodModal(${item.id})">+ Add</button>
+                    <button class="add-btn" data-id="${item.id}">+ Add</button>
                 </div>
             </div>
         </div>
     `).join("");
+
+    // Event Listener for Modal Trigger
+    document.querySelectorAll(".add-btn").forEach(btn => {
+        btn.addEventListener("click", (e) => {
+            const id = parseInt(e.target.getAttribute("data-id"));
+            openFoodModal(id);
+        });
+    });
 }
 
 // Modal View
@@ -109,6 +136,35 @@ function openFoodModal(id) {
     foodModal.show();
 }
 
+// Vendor Data Fetching from Firebase Database
+async function fetchVendors() {
+    const vendorGrid = document.getElementById("vendorGrid");
+    if (!vendorGrid) return;
+
+    try {
+        const querySnapshot = await getDocs(collection(db, "vendors"));
+        if (querySnapshot.empty) {
+            vendorGrid.innerHTML = `<p class="text-muted">No vendors found in database.</p>`;
+            return;
+        }
+
+        vendorGrid.innerHTML = "";
+        querySnapshot.forEach((doc) => {
+            const data = doc.data();
+            vendorGrid.innerHTML += `
+                <div class="card bg-dark text-white p-3 border-secondary mb-3">
+                    <h5>${data.name}</h5>
+                    <p class="mb-1 text-muted"><i class="bi bi-geo-alt"></i> ${data.address}</p>
+                    <small class="text-secondary"><i class="bi bi-telephone"></i> ${data.phone}</small>
+                </div>
+            `;
+        });
+    } catch (error) {
+        console.error("Error fetching vendors: ", error);
+    }
+}
+
+// Event Listeners and Firebase Store Implementation
 function setupEventListeners() {
     document.getElementById("authForm")?.addEventListener("submit", (e) => {
         e.preventDefault();
@@ -116,13 +172,35 @@ function setupEventListeners() {
         bootstrap.Modal.getInstance(document.getElementById("authModal")).hide();
     });
 
-    document.getElementById("vendorForm")?.addEventListener("submit", (e) => {
+    // Save Vendor to Firebase Firestore Database
+    document.getElementById("vendorForm")?.addEventListener("submit", async (e) => {
         e.preventDefault();
-        alert("Vendor details saved successfully!");
-        bootstrap.Modal.getInstance(document.getElementById("vendorModal")).hide();
+
+        const name = document.getElementById("vendorName").value;
+        const phone = document.getElementById("vendorPhone").value;
+        const address = document.getElementById("vendorAddress").value;
+
+        try {
+            await addDoc(collection(db, "vendors"), {
+                name: name,
+                phone: phone,
+                address: address,
+                timestamp: new Date()
+            });
+
+            alert("Vendor added directly into Firebase Database!");
+            document.getElementById("vendorForm").reset();
+            bootstrap.Modal.getInstance(document.getElementById("vendorModal")).hide();
+            fetchVendors();
+        } catch (error) {
+            alert("Firebase Store Error: " + error.message);
+        }
     });
 
     document.getElementById("openVendorBtn")?.addEventListener("click", () => {
+        new bootstrap.Modal(document.getElementById("vendorModal")).show();
+    });
+    document.getElementById("openVendorBtn2")?.addEventListener("click", () => {
         new bootstrap.Modal(document.getElementById("vendorModal")).show();
     });
     document.getElementById("sideLoginBtn")?.addEventListener("click", () => {
